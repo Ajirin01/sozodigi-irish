@@ -1,0 +1,25 @@
+<svg
+  width="20"
+  height="20"
+  viewBox="0 0 20 20"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Shopping Bag Body (Outlined) -->
+  <path
+    d="M5 4H15C15.553 4 16 4.447 16 5V16C16 16.553 15.553 17 15 17H5C4.447 17 4 16.553 4 16V5C4 4.447 4.447 4 5 4Z"
+    stroke="currentColor"
+    stroke-width="1.5"
+  />
+  <!-- Bag Handles (Outlined) -->
+  <path
+    d="M7 1C7 0.447 7.447 0 8 0H12C12.553 0 13 0.447 13 1V4H7V1Z"
+    stroke="currentColor"
+    stroke-width="1.5"
+  />
+  <!-- Plus Icon in the Center -->
+  <path
+    d="M10 6C10.553 6 11 6.447 11 7V9H13C13.553 9 14 9.447 14 10C14 10.553 13.553 11 13 11H11V13C11 13.553 10.553 14 10 14C9.447 14 9 13.553 9 13V11H7C6.447 11 6 10.553 6 10C6 9.447 6.447 9 7 9H9V7C9 6.447 9.447 6 10 6Z"
+    fill="currentColor"
+  />
+</svg>
