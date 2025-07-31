@@ -313,7 +313,7 @@ export default function HomePage() {
                   1
                 </div>
                 <h3 className="text-xl text-gray-600 font-semibold mt-4">Register</h3>
-                <p className="text-gray-600 mt-2">Fill in your details to create your account.</p>
+                <p className="text-gray-600 mt-2"> fill in your details and login dashboard.</p>
               </div>
 
               {/* Step 2 */}
@@ -321,8 +321,8 @@ export default function HomePage() {
                 <div className="bg-blue-900 text-orange-500 rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold shadow-lg">
                   2
                 </div>
-                <h3 className="text-xl text-gray-600 font-semibold mt-4">Click consult a doctor</h3>
-                <p className="text-gray-600 mt-2">Click to consult a doctor and receive your appointment confirmation.</p>
+                <h3 className="text-xl text-gray-600 font-semibold mt-4">Consult a GP</h3>
+                <p className="text-gray-600 mt-2">then from dashboard click consult a GP now, select your session, paystep </p>
               </div>
 
               {/* Step 3 */}
@@ -330,8 +330,8 @@ export default function HomePage() {
                 <div className="bg-blue-900 text-orange-500 rounded-full w-20 h-20 flex items-center justify-center text-3xl font-bold shadow-lg">
                   3
                 </div>
-                <h3 className="text-xl text-gray-600 font-semibold mt-4">Consult with a doctor</h3>
-                <p className="text-gray-600 mt-2">Meet with the doctor at your scheduled time.</p>
+                <h3 className="text-xl text-gray-600 font-semibold mt-4">Consult with a GP</h3>
+                <p className="text-gray-600 mt-2">you are live with the GP</p>
               </div>
             </div>
           </div>
@@ -451,9 +451,6 @@ export default function HomePage() {
         <DoctorsPage limit={6}  />
       </section>
 
-      {/* Why Choose Sozo Digicare */}
-      <WhyChooseSozo />
-
       {/* Certificates */}
       <section className="max-w-7xl mx-auto px-4 py-10">
         <motion.h2 
@@ -465,7 +462,7 @@ export default function HomePage() {
         >
           <div>
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
-              Available Certificates
+              Medical Certificates and Referral Letters
             </h2>
           </div>
           
@@ -481,6 +478,11 @@ export default function HomePage() {
             </Link>
           </div>
       </section>
+
+      {/* Why Choose Sozo Digicare */}
+      <WhyChooseSozo />
+
+      
       
 
       {/* Become One of Our Specialists */}

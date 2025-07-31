@@ -75,13 +75,18 @@ const PrescriptionReceipt = () => {
             {/* Header Logo */}
             <div className="text-center mb-4 z-10 relative">
                 <Image src="/images/logo/logo.png" alt="Logo" width={120} height={120} className="mx-auto mb-2" />
+                <p>11 The Avenue Folkstown Park. <br /> Balbriggan Co Dublin.</p>
+
+                <br />
                 <h2 className="text-xl font-semibold">Medical Prescription</h2>
+
             </div>
 
             <div className="z-10 relative mb-20">
                 <div className="mb-4">
                 <p><strong>Doctor:</strong> {appointmentSession.specialist?.firstName} {appointmentSession.specialist?.lastName}</p>
                 <p><strong>Patient:</strong> {appointmentSession.user?.firstName} {appointmentSession.user?.lastName}</p>
+                <p>{appointmentSession.user?.address?.street} <br/> {appointmentSession.user?.address?.city} <br/> {appointmentSession.user?.address?.state} <br /> {appointmentSession.user?.phone}</p>
                 <p><strong>Date:</strong> {new Date(appointmentSession.createdAt).toLocaleString()}</p>
                 </div>
 
