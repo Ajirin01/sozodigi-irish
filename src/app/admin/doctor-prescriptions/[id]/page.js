@@ -87,6 +87,7 @@ const PrescriptionReceipt = () => {
                 <p><strong>Doctor:</strong> {appointmentSession.specialist?.firstName} {appointmentSession.specialist?.lastName}</p>
                 <p><strong>Patient:</strong> {appointmentSession.user?.firstName} {appointmentSession.user?.lastName}</p>
                 <p>{appointmentSession.user?.address?.street} <br/> {appointmentSession.user?.address?.city} <br/> {appointmentSession.user?.address?.state} <br /> {appointmentSession.user?.phone}</p>
+                <p><strong>DOB</strong>: {appointmentSession.user?.DOB}</p>
                 <p><strong>Date:</strong> {new Date(appointmentSession.createdAt).toLocaleString()}</p>
                 </div>
 

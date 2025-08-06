@@ -24,7 +24,9 @@ export default function LoginPage() {
   const { addToast } = useToast();
 
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/admin";
+  // const callbackUrl = searchParams.get("callbackUrl") || "/admin";
+  const callbackUrl = "/admin";
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
