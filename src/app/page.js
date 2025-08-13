@@ -313,7 +313,7 @@ export default function HomePage() {
                   1
                 </div>
                 <h3 className="text-xl text-gray-600 font-semibold mt-4">Register</h3>
-                <p className="text-gray-600 mt-2"> fill in your details and login dashboard.</p>
+                <p className="text-gray-600 mt-2"> fill in your details and log in to the dashboard.</p>
               </div>
 
               {/* Step 2 */}
@@ -322,7 +322,7 @@ export default function HomePage() {
                   2
                 </div>
                 <h3 className="text-xl text-gray-600 font-semibold mt-4">Consult a GP</h3>
-                <p className="text-gray-600 mt-2">then from dashboard click consult a GP now, select your session, paystep </p>
+                <p className="text-gray-600 mt-2">from dashboard click consult a GP now, select your session, and pay </p>
               </div>
 
               {/* Step 3 */}
