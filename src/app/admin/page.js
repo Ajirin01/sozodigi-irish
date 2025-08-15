@@ -874,14 +874,15 @@ export default function Ecommerce() {
                     setPrice={(p) => dispatch(setPrice(p))}
                     setDuration={(d) => dispatch(setDuration(d))}
                     specialist={() => useSelector((state) => state.specialist.specialist)}
-                    currency="USD"
+                    currency="EUR"
                     plans={[
                         {
                             title: "Basic",
                             price: getPrice(900),
                             oldPrice: getOldPrice(900),
                             duration: 900,
-                            features: ["Duration: 15 mins", "Quick call", "Summary"],
+                            features: ["Duration: 15 mins", "Quick call", "Summary", "Follow-up", "Laboratory Referral", "Pharmacy Referral",
+                                "Laboratory Referral",],
                         },
                         {
                             title: "Delux",
@@ -894,6 +895,7 @@ export default function Ecommerce() {
                                 "Report",
                                 "Follow-up",
                                 "Pharmacy Referral",
+                                "Laboratory Referral",
                             ],
                             isRecommended: true,
                         },
