@@ -15,12 +15,13 @@ import { loadStripe } from '@stripe/stripe-js'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from 'next/link';
 import ConsultationBookingPageContent from "@/components/BookingPage"
 import CertificateList from "@/components/CertificateList";
 
-export default function CertificatesConsultationPage() {
+function CertificatesConsultationPageContent() {
   const searchParams = useSearchParams();
   const rescheduleId = searchParams.get("reschedule");
 
@@ -154,5 +155,13 @@ export default function CertificatesConsultationPage() {
       </section>
 
     </div>
+  );
+}
+
+export default function CertificatesConsultationPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <CertificatesConsultationPageContent />
+    </Suspense>
   );
 }

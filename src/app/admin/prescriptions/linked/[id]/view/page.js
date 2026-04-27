@@ -8,9 +8,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 
-const PrescriptionView = () => {
+const PrescriptionViewContent = () => {
   const { id } = useParams();
   const [prescription, setPrescription] = useState(null);
   const [expandedItems, setExpandedItems] = useState({});
@@ -202,4 +203,10 @@ const PrescriptionView = () => {
   );
 };
 
-export default PrescriptionView;
+export default function PrescriptionView() {
+  return (
+    <Suspense fallback={<div className="p-6">Loading...</div>}>
+      <PrescriptionViewContent />
+    </Suspense>
+  );
+}

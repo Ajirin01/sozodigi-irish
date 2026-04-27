@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from 'next/navigation'
 import { motion } from "framer-motion";
 import { Dialog } from "@headlessui/react";
@@ -32,7 +32,7 @@ import ModalContainer from "@/components/gabriel/ModalContainer";
 import io from 'socket.io-client';
 const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
 
-export default function CertificatesConsultationPage() {
+function GPConsultationPageContent() {
   const [isOpen, setIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
@@ -298,5 +298,13 @@ export default function CertificatesConsultationPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function GPConsultationPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <GPConsultationPageContent />
+    </Suspense>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { fetchData, postData } from "@/utils/api";
 import { useSearchParams, useRouter, useParams } from "next/navigation";
+import { Suspense } from "react";
 import { MapPin, GraduationCap } from "lucide-react";
 import io from "socket.io-client";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
@@ -16,7 +17,7 @@ const LottieRinger = dynamic(() => import('@/components/LottieRinger'), {
   ssr: false,
 });
 
-export default function StartConsultationPage() {
+function StartConsultationPageContent() {
   const [specialist, setSpecialist] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isInviting, setIsInviting] = useState(false);  // To track the invitation process
@@ -374,5 +375,13 @@ export default function StartConsultationPage() {
       </div>
     </div>
 
+    );
+}
+
+export default function StartConsultationPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <StartConsultationPageContent />
+    </Suspense>
   );
 }
