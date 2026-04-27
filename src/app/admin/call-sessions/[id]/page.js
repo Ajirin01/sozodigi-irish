@@ -11,6 +11,8 @@ const SessionDetailsPage = () => {
   const { id } = useParams();
   const { data: session } = useSession();
   const token = session?.user?.jwt;
+  const userRole = session?.user?.role;
+  const isPatient = userRole === "user";
   const { addToast } = useToast();
 
   const [sessionData, setSessionData] = useState(null);
@@ -110,8 +112,9 @@ const SessionDetailsPage = () => {
         <textarea
           className="w-full p-2 border rounded dark:bg-gray-800 dark:text-white"
           rows={5}
-          placeholder="Enter session notes..."
+          placeholder={isPatient ? "No notes available." : "Enter session notes..."}
           value={form.sessionNotes}
+          readOnly={isPatient}
           onChange={(e) => setForm({ ...form, sessionNotes: e.target.value })}
         />
       </div>
@@ -126,6 +129,7 @@ const SessionDetailsPage = () => {
               className="input"
               placeholder="Medication"
               value={p.medication}
+              readOnly={isPatient}
               onChange={(e) =>
                 handleChange(i, "medication", e.target.value, "prescriptions")
               }
@@ -135,35 +139,41 @@ const SessionDetailsPage = () => {
               className="input"
               placeholder="Dosage"
               value={p.dosage}
+              readOnly={isPatient}
               onChange={(e) =>
                 handleChange(i, "dosage", e.target.value, "prescriptions")
               }
             />
-            <div className="flex gap-2">
+            <div className="flex gap-2 w-full">
               <input
                 type="text"
-                className="input"
+                className="input flex-1"
                 placeholder="Frequency"
                 value={p.frequency}
+                readOnly={isPatient}
                 onChange={(e) =>
                   handleChange(i, "frequency", e.target.value, "prescriptions")
                 }
               />
-              <button
-                onClick={() => removeField("prescriptions", i)}
-                className="text-red-600"
-              >
-                ×
-              </button>
+              {!isPatient && (
+                <button
+                  onClick={() => removeField("prescriptions", i)}
+                  className="text-red-600"
+                >
+                  ×
+                </button>
+              )}
             </div>
           </div>
         ))}
-        <button
-          onClick={() => addNewField("prescriptions")}
-          className="text-blue-600 mt-2"
-        >
-          + Add Prescription
-        </button>
+        {!isPatient && (
+          <button
+            onClick={() => addNewField("prescriptions")}
+            className="text-blue-600 mt-2"
+          >
+            + Add Prescription
+          </button>
+        )}
         <div className="mt-2">
           <Link
             href={`/admin/doctor-prescriptions/${id}`}
@@ -185,6 +195,7 @@ const SessionDetailsPage = () => {
               className="input"
               placeholder="Test Name"
               value={r.testName}
+              readOnly={isPatient}
               onChange={(e) =>
                 handleChange(i, "testName", e.target.value, "labReferrals")
               }
@@ -194,6 +205,7 @@ const SessionDetailsPage = () => {
               className="input"
               placeholder="Lab Name"
               value={r.labName}
+              readOnly={isPatient}
               onChange={(e) =>
                 handleChange(i, "labName", e.target.value, "labReferrals")
               }
@@ -203,14 +215,16 @@ const SessionDetailsPage = () => {
               className="input"
               placeholder="Note"
               value={r.note}
+              readOnly={isPatient}
               onChange={(e) =>
                 handleChange(i, "note", e.target.value, "labReferrals")
               }
             />
-            <div className="flex gap-2">
+            <div className="flex gap-2 w-full">
               <select
-                className="input"
+                className="input flex-1"
                 value={r.status}
+                disabled={isPatient}
                 onChange={(e) =>
                   handleChange(i, "status", e.target.value, "labReferrals")
                 }
@@ -219,21 +233,25 @@ const SessionDetailsPage = () => {
                 <option value="completed">Completed</option>
                 <option value="cancelled">Cancelled</option>
               </select>
-              <button
-                onClick={() => removeField("labReferrals", i)}
-                className="text-red-600"
-              >
-                ×
-              </button>
+              {!isPatient && (
+                <button
+                  onClick={() => removeField("labReferrals", i)}
+                  className="text-red-600"
+                >
+                  ×
+                </button>
+              )}
             </div>
           </div>
         ))}
-        <button
-          onClick={() => addNewField("labReferrals")}
-          className="text-blue-600 mt-2"
-        >
-          + Add Lab Referral
-        </button>
+        {!isPatient && (
+          <button
+            onClick={() => addNewField("labReferrals")}
+            className="text-blue-600 mt-2"
+          >
+            + Add Lab Referral
+          </button>
+        )}
         <div className="mt-2">
           <Link
             href={`/admin/lab-referrals/${id}`}
@@ -246,13 +264,15 @@ const SessionDetailsPage = () => {
       </div>
 
       {/* Update Button */}
-      <button
-        onClick={updateSession}
-        disabled={updating}
-        className="bg-indigo-600 text-white px-6 py-2 rounded"
-      >
-        {updating ? "Updating..." : "Update Session"}
-      </button>
+      {!isPatient && (
+        <button
+          onClick={updateSession}
+          disabled={updating}
+          className="bg-indigo-600 text-white px-6 py-2 rounded"
+        >
+          {updating ? "Updating..." : "Update Session"}
+        </button>
+      )}
     </div>
   );
 };

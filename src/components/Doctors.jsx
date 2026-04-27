@@ -10,6 +10,7 @@ import { Dialog } from "@headlessui/react";
 
 import DirectSpecialistBook from "@/components/DirectSpecialistBook"
 import { X } from "lucide-react";
+import UserAvatar from "@/components/gabriel/UserAvatar";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -93,20 +94,7 @@ const DoctorsPage = ({ limit = 6 }) => {
     openDialog(doctor); dispatch(setSpecialist(doctor));
   };
 
-  const DoctorImage = ({ profileImage, alt = 'Doctor' }) => {
-    const [imgSrc, setImgSrc] = useState(profileImage ? `${apiUrl}${profileImage}` : defaultUser.src);
-  
-    return (
-      <Image
-        src={imgSrc}
-        alt={alt}
-        width={150}
-        height={150}
-        onError={() => setImgSrc(defaultUser.src)}
-        className="h-48 w-full object-cover transition-transform group-hover:scale-105"
-      />
-    );
-  };
+  // Removed local DoctorImage component
 
   if (loading) {
     return (
@@ -122,7 +110,7 @@ const DoctorsPage = ({ limit = 6 }) => {
   return (
     <div className="min-h-screen bg-gray-50 py-4 px-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {filteredSpecialists.length && 
+        {filteredSpecialists.length > 0 && 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredSpecialists.map((doctor) => (
               <motion.div
@@ -133,7 +121,13 @@ const DoctorsPage = ({ limit = 6 }) => {
                 className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow group"
               >
                 <div className="relative">
-                <DoctorImage profileImage={doctor.profileImage} />
+                  <UserAvatar 
+                    user={doctor} 
+                    className="h-48 w-full"
+                    rounded="rounded-none"
+                    border="border-none"
+                    imgClassName="group-hover:scale-105"
+                  />
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
                     <div className="flex items-center">
                       {Array.from({ length: 5 }).map((_, i) => (
@@ -206,11 +200,10 @@ const DoctorsPage = ({ limit = 6 }) => {
               <div className="flex flex-col md:flex-row rounded-3xl overflow-hidden">
                 <div className="md:w-1/3 bg-gradient-to-br from-[var(--color-primary-7)] to-[var(--color-primary-5)] p-8 text-white">
                   <div className="mb-6 flex flex-col items-center">
-                    <img
-                      src={selectedDoctor.profileImage ? `${apiUrl}${selectedDoctor.profileImage}` : defaultUser.src}
-                      alt={`Dr. ${selectedDoctor.firstName} ${selectedDoctor.lastName}`}
-                      className="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg mb-4"
-                      crossOrigin="anonymous"
+                    <UserAvatar 
+                      user={selectedDoctor} 
+                      className="w-40 h-40 mb-4"
+                      border="border-4 border-white"
                     />
                     <h2 className="text-2xl font-bold text-center">
                       Dr. {selectedDoctor.firstName} {selectedDoctor.lastName}

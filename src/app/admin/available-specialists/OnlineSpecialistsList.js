@@ -12,6 +12,7 @@ import ModalContainer from "@/components/gabriel/ModalContainer";
 import { cards } from "@/data/cards";
 import { FaSearch, FaFilter, FaUserMd } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { CURRENCY_CODE } from "@/utils/currency";
 
 import {
   setSpecialist,
@@ -214,7 +215,7 @@ const SpecialistPage = () => {
           modal={
             <CheckoutModal
               closeModal={closeModal}
-              currency="USD"
+              currency={CURRENCY_CODE}
               duration={duration}
               date={new Date(now)}
               consultMode="now"

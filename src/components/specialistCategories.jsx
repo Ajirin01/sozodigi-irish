@@ -11,6 +11,7 @@ import {
 import ModalContainer from "@/components/gabriel/ModalContainer";
 import { PricingModal, CheckoutModal, FindSpecialistModal } from "@/components/gabriel";
 import { motion } from "framer-motion";
+import { CURRENCY_CODE } from "@/utils/currency";
 
 import {
   Cardiologist, Dermatologist, Endocrinologist, GeneralPractitioner,
@@ -184,7 +185,7 @@ const SpecialistCategories = () => {
           modal={
             <CheckoutModal
               closeModal={closeModal}
-              currency="USD"
+              currency={CURRENCY_CODE}
               duration={duration}
               date={new Date()}
               consultMode="now"

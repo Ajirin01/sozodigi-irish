@@ -3,22 +3,23 @@ import React, { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { fetchData } from "@/utils/api"
 import { useSession } from "next-auth/react"
+import { useToast } from "@/context/ToastContext"
+import MedicalCertificateComponent from "@/components/MedicalCertificate"
 
-const MedicalCertificate = () => {
+const MedicalCertificatePage = () => {
   const { id } = useParams()
   const [certificate, setCertificate] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [sendingEmail, setSendingEmail] = useState(false)
 
   const { data: session } = useSession()
   const token = session?.user?.jwt
-
-  const API_URL = process.env.NEXT_PUBLIC_NODE_BASE_URL
+  const { addToast } = useToast()
 
   useEffect(() => {
     const fetchCertificate = async () => {
       try {
         const res = await fetchData(`certificates/custom/get/${id}`, token)
-        // console.log(res)
         setCertificate(res)
       } catch (error) {
         console.error("Failed to load certificate:", error)
@@ -30,101 +31,77 @@ const MedicalCertificate = () => {
     if (id && token) fetchCertificate()
   }, [id, token])
 
-  if (loading) return <div className="text-center py-20">Loading certificate...</div>
-  if (!certificate) return <div className="text-center py-20 text-red-500">Certificate not found.</div>
+  const handleSendEmail = async () => {
+    setSendingEmail(true)
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_NODE_BASE_URL}/medical-tourism/certificates/send-email/${id}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await response.json();
+      if (response.ok) {
+        addToast('Certificate emailed to patient successfully! 📧', 'success');
+      } else {
+        addToast(data.message || 'Failed to send email.', 'error');
+      }
+    } catch (error) {
+      addToast('An error occurred while sending email.', 'error');
+    } finally {
+      setSendingEmail(false)
+    }
+  };
 
-  const {
-    diagnosis = "N/A",
-    comment = "",
-    issueDate,
-    certID,
-    patient,
-    doctor,
-    qrCodeUrl
-  } = certificate
+  if (loading) return <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+  </div>;
+  
+  if (!certificate) return <div className="text-center py-20 text-red-500 font-bold">Certificate not found.</div>
 
-  const patientName = patient?.firstName+" "+patient?.lastName || "Unknown Patient"
-  const patientID = patient?._id || "—"
-  const doctorName = doctor?.firstName+" "+doctor?.lastName || "Unknown Doctor"
-  const durationMatch = comment.match(/(\d+)\s*day/i)
-  const duration = durationMatch ? durationMatch[1] : "a few"
+  const canSendEmail = ["admin", "superAdmin", "specialist"].includes(session?.user?.role);
 
   return (
-    <div className="w-full px-2 sm:px-4 md:px-6 py-10 print:p-0 flex justify-center print:bg-white">
-      <div className="bg-white w-full max-w-[794px] border shadow print:shadow-none print:border-none p-6 sm:p-10 text-gray-900 relative">
-        {/* Watermark */}
-        <img src="/images/logo/icon.png" className="absolute inset-0 w-full h-full opacity-2 pointer-events-none object-contain" alt="Watermark" />
-
-        <div className="border-6 border-[#9bb5b4] p-4 sm:p-6 md:p-10 text-center">
-          {/* Header */}
-          <div className="mb-10">
-            <img
-              src="/images/logo/logo.png"
-              alt="Sozo Digicare"
-              className="h-12 mx-auto mb-2"
-            />
-            <h2 className="text-base sm:text-lg font-bold">Sozo Digicare</h2>
-            <p className="text-sm">11 The Avenue Folkstown Park.</p>
-            <p className="text-sm mb-4">Balbriggan Co Dublin.</p>
-            <h1
-              className="text-xl sm:text-2xl md:text-[28px] lg:text-[34px] xl:text-[40px] font-bold text-[#335b75] uppercase tracking-wide mt-20 mb-20"
-              style={{ fontFamily: "serif" }}
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 overflow-y-auto pb-10">
+      <div className="max-w-4xl mx-auto pt-10">
+        <div className="flex flex-col items-end mb-6 px-4 print:hidden">
+          <div className="flex gap-4">
+            {canSendEmail && (
+              <button 
+                onClick={handleSendEmail}
+                disabled={sendingEmail}
+                className={`${sendingEmail ? 'bg-gray-400' : 'bg-emerald-600 hover:bg-emerald-700'} text-white px-6 py-2 rounded-xl font-bold transition-colors shadow-lg flex items-center gap-2`}
+              >
+                {sendingEmail ? (
+                  <><div className="animate-spin rounded-full h-4 w-4 border-t-2 border-white"></div> Sending...</>
+                ) : (
+                  'Send to Patient Email'
+                )}
+              </button>
+            )}
+            <button 
+              onClick={() => window.print()}
+              className="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 transition-colors shadow-lg"
             >
-              Medical Certificate for Sick Leave
-            </h1>
-          </div>
-
-          {/* Body */}
-          <div className="leading-8 mb-10 text-sm sm:text-base">
-            <p>
-              This certifies that <strong>{patientName}</strong> underwent a medical
-              evaluation at <strong>Sozo Digicare</strong> on{" "}
-              <strong>{new Date(issueDate).toLocaleDateString()}</strong> and is currently experiencing{" "}
-              <strong>{diagnosis}</strong>.
-            </p>
-
-            <p className="mt-6">
-              {comment || (
-                <>
-                  She is advised to refrain from work and physical activities for{" "}
-                  <strong>{duration} days</strong> for her recovery.
-                </>
-              )}
-            </p>
-          </div>
-
-          {/* Footer */}
-          <div className="mt-4">
-            <img
-              src={`${API_URL}${qrCodeUrl}` || "/images/qrcode.png"}
-              alt="QR Code"
-              className="w-16 h-16 mx-auto my-15"
-            />
-
-            <div className="flex justify-center items-center mt-6">
-              <div className="text-center">
-                <p className="font-semibold">{doctorName}</p>
-                <p className="text-sm -mt-1">Doctor/Examiner</p>
-              </div>
-
-              <div className="text-center">
-                <img
-                  src="/images/signature.png"
-                  alt="Doctor's Signature"
-                  className="w-28 h-auto"
-                />
-              </div>
-            </div>
-
-            <div className="mt-6 text-sm text-center">
-              <p>Patient’s ID Number: <strong>{patientID}</strong></p>
-              <p>Certificate ID: <strong>{certID}</strong></p>
-            </div>
+              Print Certificate
+            </button>
           </div>
         </div>
+        
+        <MedicalCertificateComponent
+          patientName={`${certificate.patient?.firstName} ${certificate.patient?.lastName}`}
+          issueDate={certificate.issueDate}
+          diagnosis={certificate.diagnosis}
+          comment={certificate.comment}
+          doctor={`${certificate.doctor?.firstName} ${certificate.doctor?.lastName}`}
+          patientID={certificate.patient?._id}
+          certID={certificate.certID}
+          qrCodeUrl={certificate.qrCodeUrl}
+          doctorSignature={certificate.doctorSignature}
+        />
       </div>
     </div>
   )
 }
 
-export default MedicalCertificate
+export default MedicalCertificatePage

@@ -71,7 +71,7 @@ const SpecialistDetailPage = () => {
           <p className="font-semibold mb-2">Uploaded License:</p>
           {specialist.practicingLicense ? (
             <a
-              href={`${process.env.NEXT_PUBLIC_NODE_BASE_URL}/${specialist.practicingLicense}`}
+              href={`${process.env.NEXT_PUBLIC_NODE_BASE_URL}${specialist.practicingLicense}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block border p-2 bg-gray-50 dark:bg-gray-800 rounded"

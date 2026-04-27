@@ -92,7 +92,7 @@ export default function SpecialistsPageContent() {
                       <TableCell className="px-5 py-4 text-gray-500 text-theme-sm dark:text-gray-400">{specialist.firstName} {specialist.lastName}</TableCell>
                       <TableCell className="px-5 py-4 text-gray-500 text-theme-sm dark:text-gray-400">{specialist.email}</TableCell>
                       <TableCell className="px-5 py-4 text-gray-500 text-theme-sm dark:text-gray-400">{specialist.specialty || "-"}</TableCell>
-                      <TableCell className="px-5 py-4 text-gray-500 text-theme-sm dark:text-gray-400">{specialist.isApproved ? "Yes" : "No"}</TableCell>
+                      <TableCell className="px-5 py-4 text-gray-500 text-theme-sm dark:text-gray-400">{specialist.approvalStatus === 'approved' ? "Yes" : "No"}</TableCell>
                       <TableCell className="px-5 py-4 text-gray-500 text-theme-sm dark:text-gray-400 flex gap-3">
                         <Link href={`/admin/specialists/details/${specialist._id}`} className="text-blue-500">
                           <PencilIcon className="w-5 h-5" />

@@ -247,6 +247,9 @@ export default function HomePage() {
             <span className="text-white block mt-2">Healthcare Services</span>
             <span className="text-[var(--color-secondary-1)] block mt-2">with our</span>
           </h2>
+          <p className="text-blue-900 font-bold mb-4 text-sm tracking-widest uppercase">
+            MYONLINEGP IS POWERED BY SOZODIGICARE
+          </p>
           <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-8">
             <TypewriterEffect words={serviceTitles} typingSpeed={100} erasingSpeed={50} delayBetweenWords={2000} />
           </div>

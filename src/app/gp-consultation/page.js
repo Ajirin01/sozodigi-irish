@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from 'next/navigation'
 import { motion } from "framer-motion";
 import { Dialog } from "@headlessui/react";
 import Calendar from "react-calendar";
@@ -40,8 +41,17 @@ export default function CertificatesConsultationPage() {
   const [onlineGPs, setOnlineGPs] = useState([]);
 
   const dispatch = useDispatch();
+  const searchParams = useSearchParams();
 
   const services = gpServices;
+
+  useEffect(() => {
+    const type = searchParams.get('type');
+    if (type) {
+      // Auto open modal with first service or a generic one
+      openDialog(services[0]);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     socket.emit("get-online-specialists");

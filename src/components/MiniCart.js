@@ -22,6 +22,7 @@ import { useSession } from "next-auth/react";
 import PrescriptionDialog from "./PrescriptionDialog";
 import { useToast } from "@/context/ToastContext";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
+import { CURRENCY_SYMBOL } from "@/utils/currency";
 
 export default function MiniCart() {
   const [isOpen, setIsOpen] = useState(false);
@@ -191,7 +192,7 @@ export default function MiniCart() {
                                 <div className="ml-4 flex flex-1 flex-col">
                                   <div className="flex justify-between text-base font-medium text-gray-900">
                                     <h3>{item.product?.name}</h3>
-                                    <p className="ml-4">₦{Math.round(item.product?.price) * item.quantity}</p>
+                                    <p className="ml-4">{CURRENCY_SYMBOL}{Math.round(item.product?.price) * item.quantity}</p>
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
                                     <div className="flex items-center space-x-2 border px-3 py-1 rounded-md">
@@ -319,7 +320,7 @@ export default function MiniCart() {
                   <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                     <div className="flex justify-between text-base font-medium text-gray-900">
                       <p>Subtotal</p>
-                      <p>₦{subtotal}</p>
+                      <p>{CURRENCY_SYMBOL}{subtotal}</p>
                     </div>
                     <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                     <div className="mt-6">

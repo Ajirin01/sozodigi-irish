@@ -36,8 +36,8 @@ const MedicalTourism = () => {
   //   console.log('Window width is:', window.innerWidth);
   // }, [hasWindow]);
 
-  const handleContactClick = () => {
-    router.push('contact');
+  const handleBookAppointmentClick = () => {
+    router.push('/gp-consultation?type=Medical%20Tourism');
   };
 
   useEffect(() => {
@@ -207,16 +207,6 @@ const MedicalTourism = () => {
           </div>
         </section>
 
-        {/* Medical Tourism Destinations */}
-        <section className="mb-20">
-          <h2 className="text-4xl font-bold mb-12 text-center">Our Global Health Havens</h2>
-          <div className="relative w-full h-[500px] border border-gray-300 rounded-lg overflow-hidden">
-          <section className="mb-20">
-            <h2 className="text-4xl font-bold mb-12 text-center">Our Global Health Havens</h2>
-            {/* <MapClientOnly /> */}
-          </section>
-          </div>
-        </section>
 
         {/* Testimonials */}
         <section className="mb-20">
@@ -246,10 +236,10 @@ const MedicalTourism = () => {
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
               <button
-                onClick={handleContactClick}
+                onClick={handleBookAppointmentClick}
                 className="bg-white text-blue-600 px-8 py-4 rounded-full text-xl font-bold hover:bg-blue-100 transition duration-300 transform hover:scale-105"
               >
-                Contact Us
+                Book Appointment
               </button>
             </div>
           </div>

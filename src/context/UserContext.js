@@ -12,21 +12,30 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const getUserData = async () => {
-      if (status === "authenticated" && session?.user) {
-        const userId = session.user.id;
-        const token = session.user.jwt;
+      try {
+        if (status === "authenticated" && session?.user) {
+          const userId = session.user.id;
+          const token = session.user.jwt;
 
-        console.log(userId)
+          console.log(userId)
 
-        const fullUser = await fetchData('users/'+userId, token);
+          const fullUser = await fetchData('users/'+userId, token);
 
-        if (fullUser) {
-          setUser(fullUser); // full user object from backend
-        } else {
-          setUser(session.user); // fallback to session user
+          if (fullUser) {
+            setUser(fullUser); // full user object from backend
+          } else {
+            setUser(session.user); // fallback to session user
+          }
         }
+      } catch (err) {
+        console.error("Error fetching user data in UserContext:", err);
+        // On error, we still have the session user as a minimal baseline
+        if (session?.user) {
+          setUser(session.user);
+        }
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     getUserData();

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Dialog } from "@headlessui/react";
 import { X } from "lucide-react";
 import { useDispatch } from "react-redux";
-import { setPrice } from "@/store/specialistSlice";
+import { setPrice, setBookingReason } from "@/store/specialistSlice";
 import ConsultationBookingPageContent from "@/components/BookingPage";
 
 const certificateItems = [
@@ -67,6 +67,7 @@ export default function CertificateList({ max }) {
   const openDialog = (cert) => {
     setSelectedCert(cert);
     dispatch(setPrice(cert.price));
+    dispatch(setBookingReason(cert.title));
     setIsOpen(true);
   };
 

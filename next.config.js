@@ -15,7 +15,21 @@ const nextConfig = withPWA({
     return config;
   },
   images: {
-    domains: ["*", "127.0.0.1"],
+    domains: ["localhost", "127.0.0.1", "sozodigicare.com"],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+      {
+        protocol: 'http',
+        hostname: '127.0.0.1',
+      },
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
 });
 

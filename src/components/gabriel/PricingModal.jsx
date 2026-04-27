@@ -7,6 +7,7 @@ import { CheckoutModal } from "@/components/gabriel";
 import StripeWrapper from "@/components/StripeWrapper";
 import { useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
+import { CURRENCY_CODE } from "@/utils/currency";
 
 const defaultPlans = [
   {
@@ -53,7 +54,7 @@ const PricingModal = ({
   setDuration,
   specialist,
   plans = defaultPlans,
-  currency = "EUR",
+  currency = CURRENCY_CODE,
 }) => {
   const [showCheckout, setShowCheckout] = useState(false);
   const [showAcknowledgment, setShowAcknowledgment] = useState(false);
@@ -95,8 +96,8 @@ const PricingModal = ({
     setSelectedDuration(null);
   };
 
-  const formatPrice = (amount, currency = "EUR") =>
-    new Intl.NumberFormat("en", {
+  const formatPrice = (amount, currency = CURRENCY_CODE) =>
+    new Intl.NumberFormat("en-US", {
       style: "currency",
       currency,
       minimumFractionDigits: 0,

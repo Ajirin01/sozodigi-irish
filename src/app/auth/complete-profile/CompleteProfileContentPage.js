@@ -8,8 +8,9 @@ import { useSession } from "next-auth/react";
 import specialistCategories from '@/utils/specialistCategories';
 import specialistSpecialties from '@/utils/specialistSpecialties';
 import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
 import { getData } from 'country-list';
+import Link from 'next/link';
+import { FaUser, FaBriefcase, FaUniversity, FaArrowLeft, FaCloudUploadAlt } from 'react-icons/fa';
 
 const formInput =
   "border-[3px] border-primary-5 text-primary-2 rounded-[20px] overflow-hidden p-2 w-full";
@@ -33,7 +34,12 @@ export default function CompleteProfilePage() {
     experience: '',
     languages: '',
     category: '',
-    bio: ''
+    bio: '',
+    bankDetails: {
+      accountName: '',
+      accountNumber: '',
+      bankName: ''
+    }
   });
 
   const [profileImageFile, setProfileImageFile] = useState(null);
@@ -83,6 +89,12 @@ export default function CompleteProfilePage() {
         ...prev,
         address: { ...prev.address, [key]: value },
       }));
+    } else if (name.includes('bankDetails.')) {
+      const key = name.split('.')[1];
+      setFormData((prev) => ({
+        ...prev,
+        bankDetails: { ...prev.bankDetails, [key]: value },
+      }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -109,10 +121,15 @@ export default function CompleteProfilePage() {
 
     const payload = new FormData();
     for (const key in formData) {
-      if (key !== 'address') payload.append(key, formData[key]);
+      if (key !== 'address' && key !== 'bankDetails') {
+        payload.append(key, formData[key]);
+      }
     }
     for (const key in formData.address) {
       payload.append(`address.${key}`, formData.address[key]);
+    }
+    for (const key in formData.bankDetails) {
+      payload.append(`bankDetails.${key}`, formData.bankDetails[key]);
     }
     if (profileImageFile) payload.append('profileImage', profileImageFile);
     if (practicingLicenseFile) payload.append('practicingLicense', practicingLicenseFile);
@@ -139,175 +156,235 @@ export default function CompleteProfilePage() {
   const countries = getData();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-10">
-      <div className="w-full max-w-6xl bg-white shadow-lg rounded-xl overflow-hidden grid md:grid-cols-2">
-        {/* Left: Image or branding */}
-        <div className="hidden md:flex flex-col items-center justify-center bg-[var(--color-primary-7)] p-6 text-white">
-          <div className="text-center mb-6">
-            <h2 className="text-3xl font-bold mb-2">
-              {session?.user?.name ? `Welcome, ${session.user.name}!` : 'Welcome!'}
-            </h2>
-            <p className="text-lg">Complete your profile to get started.</p>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => router.push('/admin')}
-            className="mt-4 px-6 py-2 border border-white rounded-full text-white hover:bg-white hover:text-[var(--color-primary-7)] transition"
-          >
-            Complete Later
-          </button>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 dark:bg-gray-900">
+      <div className="max-w-4xl w-full space-y-8 bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-purple-600"></div>
+        
+        {/* Header */}
+        <div className="flex flex-col items-center">
+          <Link href="/">
+             <img
+                width={160}
+                height={50}
+                className="dark:hidden w-auto h-14 mb-6 hover:scale-105 transition-transform"
+                src="/images/logo/logo.png"
+                alt="Logo"
+              />
+              <img
+                width={160}
+                height={50}
+                className="hidden dark:block w-auto h-14 mb-6 hover:scale-105 transition-transform"
+                src="/images/logo/logo-dark.png"
+                alt="Logo"
+              />
+          </Link>
+          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">
+            Complete Your Profile
+          </h2>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            {session?.user?.name ? `Welcome back, ${session.user.name}!` : 'Help us get to know you better.'}
+          </p>
         </div>
 
+        {error && (
+          <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-md">
+            <div className="flex">
+              <div className="text-red-700 text-sm">{error}</div>
+            </div>
+          </div>
+        )}
 
-        {/* Right: Form */}
-        <div className="p-8">
-          <h1 className="text-2xl font-semibold text-gray-700 mb-4">Complete Your Profile</h1>
-          {error && <p className="text-red-500 mb-4">{error}</p>}
-          <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block mb-1 text-sm text-gray-600">First Name <span className='text-red-700'>*</span></label>
-                <input name="firstName" value={formData.firstName} onChange={handleChange} className={inputStyle} required />
+        <form onSubmit={handleSubmit} className="mt-8 space-y-10" encType="multipart/form-data">
+          
+          {/* Section: Personal Information */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 pb-2 border-b border-gray-100 dark:border-gray-700">
+              <FaUser className="text-blue-500" />
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white">Personal Information</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">First Name <span className="text-red-500">*</span></label>
+                <input name="firstName" value={formData.firstName} onChange={handleChange} className={inputStyle} required placeholder="John" />
               </div>
-              <div>
-                <label className="block mb-1 text-sm text-gray-600">Last Name <span className='text-red-700'>*</span></label>
-                <input name="lastName" value={formData.lastName} onChange={handleChange} className={inputStyle} required />
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Last Name <span className="text-red-500">*</span></label>
+                <input name="lastName" value={formData.lastName} onChange={handleChange} className={inputStyle} required placeholder="Doe" />
               </div>
-              <div>
-                <label className="block mb-1 text-sm text-gray-600">Date of Birth <span className='text-red-700'>*</span></label>
-                <input name="DOB" value={formData.DOB} onChange={handleChange} className={inputStyle} required />
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Date of Birth <span className="text-red-500">*</span></label>
+                <input name="DOB" value={formData.DOB} onChange={handleChange} className={inputStyle} required type="date" />
               </div>
-              <div>
-                <label className="block mb-1 text-sm text-gray-600">Phone <span className='text-red-700'>*</span></label>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Phone Number <span className="text-red-500">*</span></label>
                 <PhoneInput
-                  country={'ng'}               // Change 'ng' to your preferred default country code
+                  country={'ng'}
                   value={formData.phone}
                   onChange={(phone) => setFormData(prev => ({ ...prev, phone }))}
-                  countryCodeEditable={false}  // disables editing the country code prefix
-                  inputStyle={{
-                    width: '100%',
-                    height: '40px',
-                    borderRadius: '20px',
-                    border: '2px solid rgba(38, 51, 71, 0.11)',
-                  }}
-                  buttonStyle={{
-                    borderRadius: '20px 0 0 20px',
-                    border: '2px solid rgba(38, 51, 71, 0.11)',
-                  }}
-                  inputProps={{
-                    name: 'phone',
-                    required: true,
-                  }}
+                  countryCodeEditable={false}
+                  inputStyle={{ width: '100%', height: '48px', borderRadius: '12px', border: '1px solid #e5e7eb', backgroundColor: 'transparent' }}
+                  containerClass="phone-input-container"
+                  inputProps={{ name: 'phone', required: true }}
                 />
               </div>
-              <div>
-                <label className="block mb-1 text-sm text-gray-600">Street</label>
-                <input name="address.street" value={formData.address.street} onChange={handleChange} className={inputStyle} />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Street Address</label>
+                <input name="address.street" value={formData.address.street} onChange={handleChange} className={inputStyle} placeholder="123 Main St" />
               </div>
-              <div>
-                <label className="block mb-1 text-sm text-gray-600">City</label>
-                <input name="address.city" value={formData.address.city} onChange={handleChange} className={inputStyle} />
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">City</label>
+                <input name="address.city" value={formData.address.city} onChange={handleChange} className={inputStyle} placeholder="Dublin" />
               </div>
-              <div>
-                <label className="block mb-1 text-sm text-gray-600">State</label>
-                <input name="address.state" value={formData.address.state} onChange={handleChange} className={inputStyle} />
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">State / Province</label>
+                <input name="address.state" value={formData.address.state} onChange={handleChange} className={inputStyle} placeholder="Dublin" />
               </div>
-              <div className="col-span-full">
-                <label className="block mb-1 text-sm text-gray-600">Country</label>
-                <select
-                  name="address.country"
-                  value={formData.address.country}
-                  onChange={handleChange}
-                  className={inputStyle}
-                  required
-                >
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Country <span className="text-red-500">*</span></label>
+                <select name="address.country" value={formData.address.country} onChange={handleChange} className={inputStyle} required>
                   <option value="">Select Country</option>
                   {countries.map(({ code, name }) => (
-                    <option key={code} value={name}>
-                      {name}
-                    </option>
+                    <option key={code} value={name}>{name}</option>
                   ))}
                 </select>
               </div>
             </div>
+          </div>
 
-            {role === 'specialist' && (
-              <>
-                <div>
-                  <label className="block mb-1 text-sm text-gray-600">Specialty <span className='text-red-700'>*</span></label>
-                  <select name="specialty" value={formData.specialty} onChange={handleChange} className={inputStyle} required>
-                    <option value="">Select Specialty</option>
-                    {specialistSpecialties.map((spec) => (
-                      <option key={spec} value={spec}>{spec}</option>
-                    ))}
-                  </select>
+          {/* Section: Professional Details */}
+          {(role === 'specialist' || role === 'consultant') && (
+             <div className="space-y-6 pt-6">
+              <div className="flex items-center gap-3 pb-2 border-b border-gray-100 dark:border-gray-700">
+                <FaBriefcase className="text-blue-500" />
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white">Professional Details</h3>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {role === 'specialist' && (
+                  <>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Specialty <span className="text-red-500">*</span></label>
+                      <select name="specialty" value={formData.specialty} onChange={handleChange} className={inputStyle} required>
+                        <option value="">Select Specialty</option>
+                        {specialistSpecialties.map((spec) => (
+                          <option key={spec} value={spec}>{spec}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Category <span className="text-red-500">*</span></label>
+                      <select name="category" value={formData.category} onChange={handleChange} className={inputStyle} required>
+                        <option value="">Select Category</option>
+                        {specialistCategories.map((cat) => (
+                          <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">License Number <span className="text-red-500">*</span></label>
+                      <input name="licenseNumber" value={formData.licenseNumber} onChange={handleChange} className={inputStyle} required placeholder="MD123456" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 font-medium flex items-center gap-2">
+                        <FaCloudUploadAlt /> Practicing License <span className="text-red-500">*</span>
+                      </label>
+                      <input type="file" accept="application/pdf,image/*" onChange={(e) => setPracticingLicenseFile(e.target.files[0])} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" required />
+                    </div>
+                  </>
+                )}
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Years of Experience</label>
+                  <input name="experience" value={formData.experience} onChange={handleChange} type="number" min="0" className={inputStyle} placeholder="5" />
                 </div>
-                <div>
-                  <label className="block mb-1 text-sm text-gray-600">Category <span className='text-red-700'>*</span></label>
-                  <select name="category" value={formData.category} onChange={handleChange} className={inputStyle} required>
-                    <option value="">Select Category</option>
-                    {specialistCategories.map((cat) => (
-                      <option key={cat} value={cat}>{cat}</option>
-                    ))}
-                  </select>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Languages Spoken</label>
+                  <input name="languages" value={formData.languages} onChange={handleChange} className={inputStyle} placeholder="English, French" />
                 </div>
-                <div>
-                  <label className="block mb-1 text-sm text-gray-600">License Number <span className='text-red-700'>*</span></label>
-                  <input name="licenseNumber" value={formData.licenseNumber} onChange={handleChange} className={inputStyle} required />
-                </div>
-                <div>
-                  <label className="block mb-1 text-sm text-gray-600">Upload Practicing License <span className='text-red-700'>*</span></label>
-                  <input type="file" accept="application/pdf,image/*" onChange={(e) => setPracticingLicenseFile(e.target.files[0])} className={inputStyle} required />
-                </div>
-                <div>
-                  <label className="block mb-1 text-sm text-gray-600">Short Bio</label>
-                  <textarea name="bio" value={formData.bio} onChange={handleChange} className="w-full p-2 border-2 rounded focus:outline-none focus:ring focus:border-blue-400 text-sm" rows={4} />
-                </div>
-                <div>
-                  <label className="block mb-1 text-sm text-gray-600">Years of Experience</label>
-                  <input name="experience" value={formData.experience} onChange={handleChange} type="number" min="0" className={inputStyle} />
-                </div>
-                <div>
-                  <label className="block mb-1 text-sm text-gray-600">Languages Spoken</label>
-                  <input name="languages" value={formData.languages} onChange={handleChange} className={inputStyle} />
-                </div>
-              </>
-            )}
+              </div>
+              
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Professional Bio</label>
+                <textarea name="bio" value={formData.bio} onChange={handleChange} className="w-full p-4 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" rows={4} placeholder="Tell us about your background and expertise..." />
+              </div>
+            </div>
+          )}
 
-            <div>
-              <label className="block mb-1 text-sm font-medium text-gray-600">Profile Image</label>
-              <input type="file" accept="image/*" onChange={handleFileChange} className={inputStyle} />
-              {imagePreview && (
-                <img src={imagePreview} alt="Preview" className="mt-2 h-24 w-24 rounded-full object-cover shadow" />
-              )}
+          {/* Section: Bank Details */}
+          {(role === 'specialist' || role === 'consultant') && (
+            <div className="space-y-6 pt-6">
+              <div className="flex items-center gap-3 pb-2 border-b border-gray-100 dark:border-gray-700">
+                <FaUniversity className="text-blue-500" />
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white">Bank Details</h3>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Account Name</label>
+                  <input name="bankDetails.accountName" value={formData.bankDetails.accountName} onChange={handleChange} className={inputStyle} placeholder="John Doe" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Account Number</label>
+                  <input name="bankDetails.accountNumber" value={formData.bankDetails.accountNumber} onChange={handleChange} className={inputStyle} placeholder="0123456789" />
+                </div>
+                <div className="col-span-full space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Bank Name</label>
+                  <input name="bankDetails.bankName" value={formData.bankDetails.bankName} onChange={handleChange} className={inputStyle} placeholder="Irish Health Bank" />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Profile Image & Submit */}
+          <div className="pt-10 space-y-8 border-t border-gray-100 dark:border-gray-700">
+            <div className="flex flex-col items-center">
+               <label className="text-lg font-bold text-gray-800 dark:text-white mb-4">Profile Photo</label>
+               <div className="relative group">
+                 <div className="w-32 h-32 rounded-full border-4 border-blue-100 dark:border-gray-700 overflow-hidden shadow-lg transition-transform group-hover:scale-105">
+                   {imagePreview ? (
+                      <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                        <FaUser className="text-gray-400 text-4xl" />
+                      </div>
+                    )}
+                 </div>
+                 <input type="file" accept="image/*" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+                 <div className="mt-4 text-center">
+                    <span className="text-xs text-blue-600 font-bold hover:underline">Click to upload photo</span>
+                 </div>
+               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={submitting}
-              className={`w-full py-2 px-4 rounded-md text-white font-semibold transition ${
-                submitting ? 'bg-blue-300 cursor-not-allowed' : 'bg-[var(--color-primary-7)] hover:bg-blue-700'
-              }`}
-            >
-              {submitting ? 'Saving...' : 'Save & Continue'}
-            </button>
-
-            {/* Complete Later button visible only on small screens */}
-            <button
-              type="button"
-              onClick={() => router.push('/admin')} // Adjust redirect as needed
-              className="mt-3 w-full py-2 px-4 rounded-md border border-[var(--color-primary-7)] text-[var(--color-primary-7)] font-semibold hover:bg-[var(--color-primary-7)] hover:text-white transition md:hidden"
-            >
-              Complete Later
-            </button>
-
-          </form>
-        </div>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button
+                type="submit"
+                disabled={submitting}
+                className={`flex-1 py-4 px-6 rounded-2xl text-white font-bold text-lg shadow-xl transition-all active:scale-95 ${
+                  submitting ? 'bg-blue-300 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800'
+                }`}
+              >
+                {submitting ? 'Updating Profile...' : 'Save & Continue'}
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => router.push('/admin')}
+                className="flex-1 py-4 px-6 rounded-2xl border-2 border-gray-200 text-gray-600 font-bold text-lg hover:bg-gray-50 transition-colors"
+              >
+                Skip For Now
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );
 }
 
-const inputStyle = "w-full p-2 border-2 rounded-full focus:outline-none focus:ring focus:border-blue-400 text-sm";
+const inputStyle = "w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white";
 

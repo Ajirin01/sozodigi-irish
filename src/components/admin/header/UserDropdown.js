@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { useUser } from "@/context/UserContext";
-import { signOut } from "next-auth/react";  // Import signOut
+import { signOut } from "next-auth/react";
+import UserAvatar from "../../gabriel/UserAvatar";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,11 +44,9 @@ export default function UserDropdown() {
         className="flex items-center text-gray-700 dark:text-gray-400 dropdown-toggle"
       >
         <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          <img
-            width={44}
-            height={44}
-            src={`${process.env.NEXT_PUBLIC_NODE_BASE_URL}${currentUser?.profileImage}`}
-            alt="User"
+          <UserAvatar 
+            user={currentUser} 
+            className="h-11 w-11"
           />
         </span>
 

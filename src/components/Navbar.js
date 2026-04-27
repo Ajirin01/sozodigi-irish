@@ -166,6 +166,10 @@ export default function TopNav({}) {
                       src={user.profileImage ? `${apiUrl}${user.profileImage}` : defaultUser}
                       alt={user.firstName}
                       crossOrigin="anonymous"
+                      onError={(e) => {
+                        e.target.onerror = null; 
+                        e.target.src = typeof defaultUser === 'string' ? defaultUser : defaultUser?.src || '/images/default-user.png';
+                      }}
                     />
                     <span className="text-sm text-gray-800 font-medium">{user.firstName}</span>
                     <ChevronDown size={16} className="text-gray-500" />
@@ -275,6 +279,10 @@ export default function TopNav({}) {
                       src={user.profileImage ? `${apiUrl}${user.profileImage}` : defaultUser}
                       alt={user.firstName}
                       crossOrigin="anonymous"
+                      onError={(e) => {
+                        e.target.onerror = null; 
+                        e.target.src = typeof defaultUser === 'string' ? defaultUser : defaultUser?.src || '/images/default-user.png';
+                      }}
                     />
                     <div className="flex-1">
                       <div className="font-semibold text-lg text-gray-800">

@@ -10,6 +10,7 @@ import { fetchUserProfile, logout } from "../states/user/authSlice";
 import PatientSidebar from "../layouts/PatientSidebar";
 import LogoutModal from "./LogoutModal";
 import { Notification } from "./index";
+import UserAvatar from "./UserAvatar";
 import { 
   FaChevronDown, FaChevronUp, FaBars, FaTimes, FaUserCircle, 
   FaHome, FaInfoCircle, FaUserMd, FaCubes, FaTachometerAlt,
@@ -384,11 +385,9 @@ const Navbar = ({ className, onMenuClick }) => {
                     
                     <div className="flex items-center space-x-3 bg-gray-50 rounded-full px-3 py-1.5 border border-gray-100">
                       <div className="relative">
-                        <img
-                          className="h-8 w-8 rounded-full object-cover border-2 border-white shadow-sm"
-                          src={user.profileImage ? `${apiUrl}${user.profileImage}` : defaultUser}
-                          alt={user.firstName}
-                          crossOrigin="anonymous"
+                        <UserAvatar 
+                          user={user} 
+                          className="h-8 w-8"
                         />
                         <div className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-400 border-2 border-white"></div>
                       </div>
@@ -473,11 +472,9 @@ const Navbar = ({ className, onMenuClick }) => {
                     transform opacity-0 translate-y-4
                     ${mobileMenuTransitionStage === 2 ? 'opacity-100 translate-y-0 transition-all duration-500' : ''}
                   `}>
-                    <img
-                      className="h-14 w-14 rounded-full object-cover border-2 border-white shadow-md"
-                      src={user.profileImage ? `${apiUrl}${user.profileImage}` : defaultUser}
-                      alt={user.firstName}
-                      crossOrigin="anonymous"
+                    <UserAvatar 
+                      user={user} 
+                      className="h-14 w-14"
                     />
                     <div className="flex-1">
                       <div className="font-semibold text-lg text-gray-800">

@@ -15,16 +15,40 @@ import { loadStripe } from '@stripe/stripe-js'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
+import { useSearchParams } from "next/navigation";
+import Link from 'next/link';
 import ConsultationBookingPageContent from "@/components/BookingPage"
 import CertificateList from "@/components/CertificateList";
 
 export default function CertificatesConsultationPage() {
+  const searchParams = useSearchParams();
+  const rescheduleId = searchParams.get("reschedule");
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCert, setSelectedCert] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentStep, setCurrentStep] = useState(1);
 
   const dispatch = useDispatch()
+
+  if (rescheduleId) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12 px-6">
+        <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+          <div className="mb-8 flex justify-between items-center border-b pb-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800">Reschedule Appointment</h1>
+              <p className="text-gray-500 mt-1">Select a new date and time for your consultation.</p>
+            </div>
+            <Link href="/admin/appointments" className="text-indigo-600 hover:text-indigo-800 font-medium">
+              ← Back to Appointments
+            </Link>
+          </div>
+          <ConsultationBookingPageContent showSpecialistCategories={false} />
+        </div>
+      </div>
+    );
+  }
 
   const openDialog = (cert) => {
     setSelectedCert(cert);

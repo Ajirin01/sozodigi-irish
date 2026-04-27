@@ -9,6 +9,7 @@ import { fetchData } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { useUser  } from "@/context/UserContext"
 import { signOut } from 'next-auth/react';
+import UserAvatar from "../components/gabriel/UserAvatar";
 import {
   Box,
   ChevronDown,
@@ -174,6 +175,13 @@ const AppSidebar = () => {
         icon: <User />,
         name: "Specialists",
         path: "/admin/specialists",
+        roles: ["admin", "superAdmin"]
+      },
+      // Patients
+      {
+        icon: <User />,
+        name: "Patients",
+        path: "/admin/patients",
         roles: ["admin", "superAdmin"]
       },
       // availability
@@ -370,6 +378,13 @@ const AppSidebar = () => {
         name: "Blogs",
         path: "/admin/blogs",
         roles: ["admin", "superAdmin"]
+      },
+      // Medical Certificates
+      {
+        icon: <FileText />,
+        name: "Medical Certificates",
+        path: "/admin/medical-certificates",
+        roles: ["admin", "superAdmin", "specialist"]
       }
     ];
 
@@ -465,23 +480,23 @@ const AppSidebar = () => {
   onMouseLeave={() => setIsHovered(false)}
 >
   {/* Logo */}
-  <div className={`py-8 flex ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-start"}`}>
-    <a href="/">
+  <div className="py-10 flex justify-center items-center">
+    <Link href="/" className="transition-transform duration-300 hover:scale-110">
       <img
-        width={100}
-        height={32}
-        className="dark:hidden"
+        width={140}
+        height={45}
+        className="dark:hidden w-auto h-12"
         src="/images/logo/logo.png"
         alt="Logo"
       />
       <img
-        width={100}
-        height={32}
-        className="hidden dark:block"
+        width={140}
+        height={45}
+        className="hidden dark:block w-auto h-12"
         src="/images/logo/logo-dark.png"
         alt="Logo"
       />
-    </a>
+    </Link>
   </div>
 
   {/* Main content with scrollable menu and sticky bottom logout */}
@@ -490,11 +505,9 @@ const AppSidebar = () => {
     <div className="flex flex-col overflow-y-auto no-scrollbar">
       {/* User Info */}
       <div className="flex flex-col items-center p-4 border-b border-gray-200">
-        <img
-          src={user?.profileImage ? `${apiUrl}${user?.profileImage}` : defaultUser.src}
-          crossOrigin="anonymous"
-          alt="User"
-          className="w-20 h-20 rounded-full mb-2 object-cover"
+        <UserAvatar 
+          user={user} 
+          className="w-20 h-20 mb-2"
         />
         <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">{user?.firstName}</h2>
       </div>

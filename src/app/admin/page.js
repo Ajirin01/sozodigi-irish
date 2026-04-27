@@ -25,6 +25,7 @@ import { fetchData } from "@/utils/api";
 import { triggerChatbotAttention, openChatBot } from "@/store/popUpSlice";
 import { useDispatch } from "react-redux";
 import RecentTransactions from "@/components/admin/ecommerce/RecentTransactions";
+import { CURRENCY_SYMBOL } from "@/utils/currency";
 
 import { setPrice, setSpecialist, setDuration } from '@/store/specialistSlice';
 import { CalculatorIcon, CheckCircle, X } from "lucide-react";
@@ -465,9 +466,9 @@ export default function Ecommerce() {
     },
     {
       title: "Earning",
-      value: `$${calls.reduce((total, call) => total + (call.appointment?.price || 0) * 2, 0)}`,
+      value: `${CURRENCY_SYMBOL}${calls.reduce((total, call) => total + (call.appointment?.price || 0) * 2, 0)}`,
       change: calls.length > 0
-        ? `Last: $${(calls[calls.length - 1].durationInMinutes || 0) * 2}`
+        ? `Last: ${CURRENCY_SYMBOL}${(calls[calls.length - 1].durationInMinutes || 0) * 2}`
         : "No past earning",
       icon: <FaMoneyBill className="text-blue-600" size={20} />,
       bgColor: "bg-blue-50",
@@ -514,7 +515,7 @@ export default function Ecommerce() {
     },
     {
       title: "Revenue",
-      value: `$${revenue ? calTotalRevnue(revenue)?.toFixed(2) : 'loading...'}`,
+      value: `${CURRENCY_SYMBOL}${revenue ? calTotalRevnue(revenue)?.toFixed(2) : 'loading...'}`,
       change: calls.length > 0
         ? `Last: ${revenue ? new Date(revenue[0].created * 1000).toLocaleDateString() : 'loading...'}`
         : "No past payments",

@@ -10,11 +10,12 @@ import { useSession } from "next-auth/react";
 import { postData } from "@/utils/api";
 import { useUser } from "@/context/UserContext";
 import { useToast } from "@/context/ToastContext";
+import { CURRENCY_CODE, CURRENCY_SYMBOL } from "@/utils/currency";
 
 const CheckoutModal = ({
   closeModal,
   amount,
-  currency = "EUR",
+  currency = CURRENCY_CODE,
   duration,
   initiateCallAPI,
   date
@@ -265,7 +266,7 @@ const CheckoutModal = ({
             </div>
 
             <div className="mb-4 text-lg font-semibold">
-              Total: {formatAmount(amount)} {currency}
+              Total: {CURRENCY_SYMBOL}{formatAmount(amount)}
             </div>
 
             {error && <div className="text-red-500 mb-4">{error}</div>}
@@ -279,7 +280,7 @@ const CheckoutModal = ({
                 ? "Processing..."
                 // : callStatus === "timeout"
                 // ? "Retry Call"
-                : `Pay ${formatAmount(amount)} ${currency}`}
+                : `Pay ${CURRENCY_SYMBOL}${formatAmount(amount)}`}
             </button>
           </form>
          ) : (

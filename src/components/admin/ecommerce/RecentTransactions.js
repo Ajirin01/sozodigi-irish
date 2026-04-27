@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "../ui/table";
 import Badge from "../ui/badge/Badge";
 import { fetchData } from "@/utils/api";
+import { CURRENCY_SYMBOL } from "@/utils/currency";
 import { useSession } from "next-auth/react";
 
 export default function RecentTransactions() {
@@ -78,7 +79,7 @@ export default function RecentTransactions() {
                 </TableCell>
 
                 <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  ${txn.amount.toFixed(2)}
+                  {CURRENCY_SYMBOL}{txn.amount.toFixed(2)}
                 </TableCell>
 
                 {/* <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">

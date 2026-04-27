@@ -78,6 +78,8 @@ const PaymentSuccessContentPage = () => {
         date: orderData.date,
         duration: orderData.duration,
         type: orderData.type,
+        reason: orderData.reason,
+        illness: orderData.illness,
         paymentStatus: 'paid',
         transactionId: paymentData?.transactionId,
         amountPaid: paymentData?.amount,

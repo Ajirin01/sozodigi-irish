@@ -25,8 +25,21 @@ const protectedRoutes = [
 ];
 
 export async function middleware(req) {
-  const token = await getToken({ req });
   const { pathname } = req.nextUrl;
+
+  // Geo-restriction: Only allow Ireland (IE)
+  // Dev/Debug bypass
+  const isDev = process.env.NODE_ENV === 'development';
+  const isDebug = process.env.NEXT_PUBLIC_DEBUG === 'true';
+
+  if (!isDev && !isDebug) {
+    const country = req.geo?.country || 'IE';
+    if (country !== 'IE' && !pathname.startsWith('/api') && !pathname.startsWith('/_next') && !pathname.startsWith('/auth')) {
+       return new NextResponse('Access restricted to Ireland only.', { status: 403 });
+    }
+  }
+
+  const token = await getToken({ req });
 
   if (
     pathname.startsWith("/auth") ||

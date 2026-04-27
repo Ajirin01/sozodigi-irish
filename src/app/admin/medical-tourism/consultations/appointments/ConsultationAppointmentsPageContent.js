@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, TrashIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import { fetchData, deleteData } from "@/utils/api";
 import { useToast } from "@/context/ToastContext";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
@@ -184,8 +184,8 @@ const ConsultationAppointmentsPageContent  = () => {
                       {appointment.paymentStatus}
                     </TableCell>
                     <TableCell className="px-5 py-4 flex gap-3">
-                      <Link href={`/admin/medical-tourism/consultations/appointments/edit/${appointment._id}`} className="text-blue-500">
-                        <PencilSquareIcon className="w-5 h-5" />
+                      <Link href={`/cert?reschedule=${appointment._id}`} className="text-blue-500 hover:text-blue-700">
+                        <ArrowPathIcon className="w-5 h-5" />
                       </Link>
                       <button className="text-red-500" onClick={() => { setItemToDelete(appointment); setIsDialogOpen(true); }}>
                         <TrashIcon className="w-5 h-5" />

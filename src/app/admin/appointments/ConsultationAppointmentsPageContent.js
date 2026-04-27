@@ -6,7 +6,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { PlayIcon, UsersIcon   } from "@heroicons/react/24/outline";
 import { RotateCcw, Trash } from "lucide-react";
-import { fetchData, deleteData } from "@/utils/api";
+import { fetchData, deleteData, postData } from "@/utils/api";
 import { useToast } from "@/context/ToastContext";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import {
@@ -107,6 +107,42 @@ const ConsultationAppointmentsPageContent  = () => {
 
   const changePage = (newPage) => {
     router.push(`?page=${newPage}`);
+  };
+
+  const handleStartSession = async (appointment) => {
+    try {
+       // Check if session already exists
+       const existingRes = await fetchData(`video-sessions/by-appointment/${appointment._id}`, token);
+       if (existingRes?.success && existingRes?.session) {
+          router.push(`/admin/appointments/session/${existingRes.session._id}`);
+          return;
+       }
+    } catch(err) {
+       // Does not exist, proceed to create
+    }
+
+    try {
+      const payload = {
+        appointment: appointment._id,
+        specialist: appointment.consultant?._id || session?.user?.id,
+        user: appointment.patient?._id,
+      };
+      const res = await postData("video-sessions", payload, token);
+      if (res?.success) {
+        const sessionData = res.session;
+        const { specialistToken, patientToken } = sessionData;
+
+        localStorage.setItem(
+          "activeVideoSession",
+          JSON.stringify({ session: sessionData, specialistToken, patientToken })
+        );
+        router.push(`/admin/appointments/session/${sessionData._id}`);
+      } else {
+        addToast("Failed to create session", "error");
+      }
+    } catch(err) {
+      addToast("Failed to start session", "error");
+    }
   };
 
   return (
@@ -219,15 +255,14 @@ const ConsultationAppointmentsPageContent  = () => {
                         <MenuItems
                           className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
                         >
-                          <div className="py-1">
-                            {(appointment.status === "completed") &&
+                           <div className="py-1">
+                            {appointment.status === "completed" && session?.user?.role !== "user" && (
                               <>
                                 <MenuItem>
                                   <Link
                                     href={`/admin/medical-certificates/create?appointment=${appointment._id}`}
                                     className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                   >
-                                    {/* <PlayIcon className="w-4 h-4 text-green-500" /> */}
                                     Create Certificate
                                   </Link>
                                 </MenuItem>
@@ -237,7 +272,6 @@ const ConsultationAppointmentsPageContent  = () => {
                                     href={`/admin/appointments/session/${appointment._id}`}
                                     className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                   >
-                                    {/* <PlayIcon className="w-4 h-4 text-green-500" /> */}
                                     Send Certificate
                                   </Link>
                                 </MenuItem>
@@ -247,23 +281,22 @@ const ConsultationAppointmentsPageContent  = () => {
                                     href={`/admin/appointments/session/${appointment._id}`}
                                     className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                   >
-                                    {/* <PlayIcon className="w-4 h-4 text-green-500" /> */}
                                     Decline Cert Request
                                   </Link>
                                 </MenuItem>
                               </>
-                            }
+                            )}
                             { appointment.status !== "completed" &&
                               <>
-                                <MenuItem>
-                                  <Link
-                                    href={`/admin/appointments/session/${appointment._id}`}
-                                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                  >
-                                    <PlayIcon className="w-4 h-4 text-green-500" />
-                                    Start Session
-                                  </Link>
-                                </MenuItem>
+                                  <MenuItem>
+                                    <button
+                                      onClick={() => handleStartSession(appointment)}
+                                      className="flex items-center gap-2 px-4 py-2 w-full text-left text-sm text-gray-700 hover:bg-gray-100"
+                                    >
+                                      <PlayIcon className="w-4 h-4 text-green-500" />
+                                      Start Session
+                                    </button>
+                                  </MenuItem>
                                 {/* <MenuItem>
                                   <Link
                                     href={`/admin/available-specialists?appointmentId=${appointment._id}`}
@@ -276,29 +309,20 @@ const ConsultationAppointmentsPageContent  = () => {
                                 
                               </>}
 
-                              {/* { session?.user?.role === "user" &&
+                              { (session?.user?.role === "user" || session?.user?.role === "admin") && ['pending', 'confirmed'].includes(appointment.status) &&
                                 <MenuItem>
                                   <Link
-                                    href={`/admin/appointments/retake/${appointment._id}`}
+                                    href={`/cert?reschedule=${appointment._id}`}
                                     className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                   >
-                                    <RotateCcw className="w-4 h-4 text-red-500" />
-                                    Retake
+                                    <RotateCcw className="w-4 h-4 text-blue-500" />
+                                    Reschedule
                                   </Link>
                                 </MenuItem>
-                              } */}
+                              }
 
                             { session?.user?.role === "admin" &&
                               <>
-                                <MenuItem>
-                                  <Link
-                                    href={`/admin/medical-tourism/consultations/appointments/edit/${appointment._id}`}
-                                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                  >
-                                    ✏️ Edit Appointment
-                                  </Link>
-                                </MenuItem>
-
                                 <MenuItem>
                                   <button
                                     onClick={() => {setIsDialogOpen(true); setItemToDelete(appointment)}}

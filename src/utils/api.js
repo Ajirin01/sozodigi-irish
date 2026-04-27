@@ -1,4 +1,5 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_NODE_API_BASE_URL || "http://localhost:5000";
+const PLATFORM = process.env.NEXT_PUBLIC_PLATFORM || "global";
 
 // Timeout Fetch with Retry
 export async function fetchWithTimeout(resource, options = {}, timeout = 10000, retries = 3) {
@@ -45,11 +46,10 @@ async function handleResponse(res) {
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    const error = {
-      status: res.status,
-      data: data,
-      message: data?.message || `Error: ${res.statusText}`,
-    };
+    const errorMsg = data?.message || `Error: ${res.statusText}`;
+    const error = new Error(errorMsg);
+    error.status = res.status;
+    error.data = data;
     throw error;
   }
 
@@ -58,19 +58,21 @@ async function handleResponse(res) {
 
 // GET
 export async function fetchData(endpoint, token = null) {
-  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  const headers = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    "x-platform": PLATFORM,
+  };
   const res = await fetchWithTimeout(`${API_BASE_URL}/${endpoint}`, { headers });
   return handleResponse(res);
 }
 
 // POST
 export async function postData(endpoint, data, token = null, isFormData = false) {
-  const headers = token
-    ? {
-        Authorization: `Bearer ${token}`,
-        ...(isFormData ? {} : { "Content-Type": "application/json" }),
-      }
-    : { "Content-Type": "application/json" };
+  const headers = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    "x-platform": PLATFORM,
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
+  };
 
   const res = await fetchWithTimeout(`${API_BASE_URL}/${endpoint}`, {
     method: "POST",
@@ -83,12 +85,11 @@ export async function postData(endpoint, data, token = null, isFormData = false)
 
 // PUT
 export async function updateData(endpoint, data, token = null, isFormData = false) {
-  const headers = token
-    ? {
-        Authorization: `Bearer ${token}`,
-        ...(isFormData ? {} : { "Content-Type": "application/json" }),
-      }
-    : { "Content-Type": "application/json" };
+  const headers = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    "x-platform": PLATFORM,
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
+  };
 
   const res = await fetchWithTimeout(`${API_BASE_URL}/${endpoint}`, {
     method: "PUT",
@@ -99,9 +100,29 @@ export async function updateData(endpoint, data, token = null, isFormData = fals
   return handleResponse(res);
 }
 
+// PATCH
+export async function patchData(endpoint, data, token = null, isFormData = false) {
+  const headers = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    "x-platform": PLATFORM,
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
+  };
+
+  const res = await fetchWithTimeout(`${API_BASE_URL}/${endpoint}`, {
+    method: "PATCH",
+    headers,
+    body: isFormData ? data : JSON.stringify(data),
+  });
+
+  return handleResponse(res);
+}
+
 // DELETE
 export async function deleteData(endpoint, token = null) {
-  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  const headers = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    "x-platform": PLATFORM,
+  };
 
   const res = await fetchWithTimeout(`${API_BASE_URL}/${endpoint}`, {
     method: "DELETE",

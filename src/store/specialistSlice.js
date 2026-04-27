@@ -6,7 +6,8 @@ const initialState = {
   duration: null,
   appointmentDate: new Date().toISOString(),
   consultMode: "now",
-  slot: {}
+  slot: {},
+  bookingReason: ""
 };
 
 const specialistSlice = createSlice({
@@ -31,13 +32,17 @@ const specialistSlice = createSlice({
     setSlot(state, action) {
       state.slot = action.payload;
     },
+    setBookingReason(state, action) {
+      state.bookingReason = action.payload;
+    },
     resetBooking(state) {
       state.specialist = null;
       state.price = null;
       state.duration = null;
       state.appointmentDate = new Date().toISOString();
-      state.consultMode = null
-      state.slot = {}
+      state.consultMode = null;
+      state.slot = {};
+      state.bookingReason = "";
     },
   },
 });
@@ -49,6 +54,7 @@ export const {
   setAppointmentDate,
   setConsultMode,
   setSlot,
+  setBookingReason,
   resetBooking,
 } = specialistSlice.actions;
 

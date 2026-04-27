@@ -87,7 +87,7 @@ const Footer = () => {
             <div className="mt-6 text-white/80 text-sm">
               <div className="flex items-center gap-2 mb-2">
                 <FaEnvelope className="text-secondary-6" />
-                <span>Contact@sozodigicare.ie</span>
+                <span>Contact@myonlinegp.ie</span>
               </div>
               <div className="flex items-center gap-2">
                 {/* <FaPhoneAlt className="text-secondary-6" /> */}
@@ -101,8 +101,11 @@ const Footer = () => {
         <div className="border-t border-white/10 my-8"></div>
 
         {/* Copyright */}
-        <div className="flex flex-col md:flex-row justify-between items-center text-white/70 text-sm">
-          <p>© {currentYear} SozoDigiCare. All rights reserved.</p>
+        <div className="flex flex-col md:flex-row justify-between items-center text-white/70 text-sm italic">
+           <p>MYONLINEGP IS POWERED BY SOZODIGICARE</p>
+        </div>
+        <div className="flex flex-col md:flex-row justify-between items-center text-white/70 text-sm mt-4">
+          <p>© {currentYear} MyOnlineGP. All rights reserved.</p>
           <p className="mt-3 md:mt-0">Designed with care for better healthcare accessibility</p>
         </div>
       </div>

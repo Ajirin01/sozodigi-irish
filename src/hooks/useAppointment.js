@@ -10,13 +10,13 @@ const useAppointment = (id, token) => {
       try {
         const res = await fetchData(`video-sessions/${id}`, token);
 
-        if (res.success && res.session && res.session.appointment.status === 'pending') {
+        if (res?.success && res?.session?.appointment?.status === 'pending') {
           await updateData(`video-sessions/${id}`, { startTime: new Date().toISOString() }, token);
         }
 
         setAppointment(res);
       } catch (err) {
-        console.error('Failed to fetch appointment', err);
+        console.warn('Failed to fetch appointment', err);
       } finally {
         setLoading(false);
       }

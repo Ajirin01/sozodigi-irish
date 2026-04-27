@@ -16,7 +16,10 @@ export default NextAuth({
         try {
           const res = await fetch(`${API_BASE_URL}/users/login`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+              "Content-Type": "application/json",
+              "x-platform": process.env.NEXT_PUBLIC_PLATFORM || "global"
+            },
             body: JSON.stringify({
               email: credentials.email,
               password: credentials.password,

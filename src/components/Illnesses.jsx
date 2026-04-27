@@ -1,9 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import ModalContainer from "@/components/gabriel/ModalContainer";
-import { FindSpecialistModal } from "@/components/gabriel";
+import { FindSpecialistModal, PricingModal, CheckoutModal } from "@/components/gabriel";
+import { useDispatch, useSelector } from "react-redux";
+import { setSpecialist, setPrice, setDuration, resetBooking } from "@/store/specialistSlice";
+import io from "socket.io-client";
+import { CURRENCY_CODE } from "@/utils/currency";
+
+const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
 
 const illnesses = [
   { name: "Cold & Flu", image: "/images/health-illness/body.png" },
@@ -47,10 +53,50 @@ const itemVariant = {
 };
 
 const GPServicesIllnesses = ({ limit }) => {
+  const dispatch = useDispatch();
+  const duration = useSelector((state) => state.specialist.duration);
+  const specialist = useSelector((state) => state.specialist.specialist);
+  
   const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+  const [onlineGPs, setOnlineGPs] = useState([]);
 
-  const openFindModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
+  useEffect(() => {
+    socket.emit("get-online-specialists");
+    socket.on("update-specialists", (data) => {
+        const gpsOnly = data.filter((specialist) => specialist.category === "General Practitioner");
+        setOnlineGPs(gpsOnly);
+    });
+
+    return () => {
+      socket.off("update-specialists");
+    };
+  }, []);
+
+  const isDoctorOnline = onlineGPs.length > 0;
+
+  const openActionModal = () => {
+    if (isDoctorOnline) {
+      dispatch(setSpecialist(onlineGPs[0]));
+      setModalContent("pricingModal");
+      setShowModal(true);
+    } else {
+      setModalContent("findSpecialistModal");
+      setShowModal(true);
+    }
+  };
+
+  const openCheckoutModal = (price, duration) => {
+    dispatch(setPrice(price));
+    dispatch(setDuration(duration));
+    setModalContent("checkoutModal");
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setModalContent(null);
+    dispatch(resetBooking());
+  };
 
   const displayedIllnesses = limit ? illnesses.slice(0, limit) : illnesses;
 
@@ -79,20 +125,55 @@ const GPServicesIllnesses = ({ limit }) => {
             <div className="flex flex-col justify-between flex-1">
               <h3 className="text-md font-semibold text-gray-800">{illness.name}</h3>
               <button
-                onClick={openFindModal}
-                className="mt-2 w-fit text-sm bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition"
+                onClick={openActionModal}
+                className={`mt-2 w-fit text-sm px-4 py-2 rounded-lg transition font-medium ${
+                  isDoctorOnline
+                    ? "bg-green-500 text-white hover:bg-green-600 shadow-md transform hover:scale-105"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
               >
-                CONSULT NOW
+                {isDoctorOnline ? "CONSULT NOW" : "BOOK APPOINTMENT"}
               </button>
             </div>
           </motion.div>
         ))}
       </div>
 
-      {showModal && (
+      {/* Modals */}
+      {showModal && modalContent === "findSpecialistModal" && (
         <ModalContainer
           modal={
-            <FindSpecialistModal category="General Practitioner" closeModal={closeModal} />
+            <FindSpecialistModal
+              category="General Practitioner"
+              closeModal={closeModal}
+            />
+          }
+        />
+      )}
+
+      {showModal && modalContent === "pricingModal" && (
+        <ModalContainer
+          modal={
+            <PricingModal
+              closeModal={closeModal}
+              setPrice={(p) => dispatch(setPrice(p))}
+              setDuration={(d) => dispatch(setDuration(d))}
+              onConfirm={(p, d) => openCheckoutModal(p, d)}
+            />
+          }
+        />
+      )}
+
+      {showModal && modalContent === "checkoutModal" && specialist && (
+        <ModalContainer
+          modal={
+            <CheckoutModal
+              closeModal={closeModal}
+              currency={CURRENCY_CODE}
+              duration={duration}
+              date={new Date(Date.now())}
+              consultMode="now"
+            />
           }
         />
       )}
