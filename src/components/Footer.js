@@ -64,7 +64,7 @@ const Footer = () => {
 
           {/* The Platform */}
           <FooterSection title="The Platform">
-            <li><FooterLink href="/auth/sign-in">Log in</FooterLink></li>
+            <li><FooterLink href="/login">Log in</FooterLink></li>
             <li><FooterLink href="/auth/sign-up">Sign up</FooterLink></li>
             <li><FooterLink href="/auth/sign-up?role=pharmacist">Register Pharmacy</FooterLink></li>
             <li><FooterLink href="/auth/sign-up?role=labAdmin">Register Laboratory</FooterLink></li>
