@@ -32,27 +32,27 @@ export default function ConfirmationDialog({
         onClick={onClose}
       />
       
-      <div className="relative w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all m-4">
+      <div className="relative w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all m-4 border dark:border-gray-700">
         <div className="flex justify-center mb-4">
           <ExclamationTriangleIcon className="h-12 w-12 text-red-600" />
         </div>
-        <h3 className="text-lg font-semibold leading-6 text-gray-900 text-center">
+        <h3 className="text-lg font-semibold leading-6 text-gray-900 dark:text-white text-center">
           {title}
         </h3>
         <div className="mt-2 text-center">
-          <p className="text-sm text-gray-700">{message}</p>
+          <p className="text-sm text-gray-700 dark:text-gray-300">{message}</p>
         </div>
 
         {requireIndemnity && (
-          <div className="mt-4 flex items-start text-left bg-gray-50 p-3 rounded-md border border-gray-200">
+          <div className="mt-4 flex items-start text-left bg-gray-50 dark:bg-gray-700/50 p-3 rounded-md border border-gray-200 dark:border-gray-600">
             <input
               type="checkbox"
               id="indemnityAgreement"
               checked={isChecked}
               onChange={(e) => setIsChecked(e.target.checked)}
-              className="mt-1 h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+              className="mt-1 h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-primary-600 focus:ring-primary-500 cursor-pointer"
             />
-            <label htmlFor="indemnityAgreement" className="ml-2 block text-sm text-gray-700 cursor-pointer">
+            <label htmlFor="indemnityAgreement" className="ml-2 block text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
               {indemnityMessage}
             </label>
           </div>
@@ -65,7 +65,7 @@ export default function ConfirmationDialog({
               if (onCancel) onCancel();
               onClose();
             }} 
-            className="inline-flex justify-center rounded-md border border-transparent bg-gray-200 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-300 focus:outline-none"
+            className="inline-flex justify-center rounded-md border border-transparent bg-gray-200 dark:bg-gray-700 px-4 py-2 text-sm font-medium text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none"
           >
             {cancelText}
           </button>

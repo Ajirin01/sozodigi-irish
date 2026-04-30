@@ -62,35 +62,35 @@ const MedicalCertificateDialog = ({
   return (
     <Dialog title="Issue Medical Certificate" onClose={onClose}>
       <div className="space-y-4">
-        <div className="p-3 bg-blue-50 rounded-lg border border-blue-100 flex items-center gap-3">
-          <FaFileMedical className="text-blue-600" />
+        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800 flex items-center gap-3">
+          <FaFileMedical className="text-blue-600 dark:text-blue-400" />
           <div>
-            <p className="text-xs font-bold text-blue-600 uppercase">Patient</p>
-            <p className="text-sm font-bold text-gray-800">
+            <p className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase">Patient</p>
+            <p className="text-sm font-bold text-gray-800 dark:text-white">
                {appointment.user?.firstName} {appointment.user?.lastName}
             </p>
           </div>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-bold text-gray-700">Diagnosis</label>
+          <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Diagnosis</label>
           <input
             type="text"
             value={diagnosis}
             onChange={(e) => setDiagnosis(e.target.value)}
             placeholder="e.g. Severe Migraine"
-            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-gray-800 dark:text-white"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-bold text-gray-700">Comments / Recommendations</label>
+          <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Comments / Recommendations</label>
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             rows={4}
             placeholder="Describe condition and rest period..."
-            className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-gray-800 dark:text-white"
           />
         </div>
 

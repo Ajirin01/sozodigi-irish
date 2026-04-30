@@ -1,25 +1,25 @@
 export const faqItems = [
   {
-    question: "What is Sozo Digicare Limited?",
+    question: "What is Sozodigicare Limited?",
     answer: "We are an online telehealth platform fully compliant with regulatory standards, including GDPR and the guidelines of the Medical Council of Ireland..."
   },
   {
-    question: "How does Sozo Digicare work?",
+    question: "How does Sozodigicare work?",
     answer: "First, complete a health questionnaire, and schedule an appointment immediately or for a future convenient date..."
   },
   {
-    question: "Does Sozo Digicare work for all patients?",
+    question: "Does Sozodigicare work for all patients?",
     answer: "Since our doctors cannot physically examine you or access your full medical history, they take extra precautions..."
   },
 
   {
-    question: "How quickly will Sozo Digicare confirm your appointment or consultation",
+    question: "How quickly will Sozodigicare confirm your appointment or consultation",
     answer: "We work on scheduling an appointment immediately or for a future convenient date as you request. Once you complete your pre-consultation form, you will receive an email confirmation after the consultation."
   },
 
   {
     question: "Hours of service?",
-    answer: "The Sozo Digicare service is open 24 hours a day, 365 days a year ensuring you have access to medical care whenever you need it, be it day, night, or even the weekends. If you are looking to collect a prescription from a late-night pharmacy after 8pm please email contact@SozoDigicare.ie and we will do our very best to help."
+    answer: "The Sozodigicare service is open 24 hours a day, 365 days a year ensuring you have access to medical care whenever you need it, be it day, night, or even the weekends. If you are looking to collect a prescription from a late-night pharmacy after 8pm please email contact@Sozodigicare.ie and we will do our very best to help."
   },
 
   {
@@ -28,7 +28,7 @@ export const faqItems = [
   },
 
   {
-    question: "What makes Sozo Digicare.ie different from other online doctor services in Ireland?",
+    question: "What makes Sozodigicare.ie different from other online doctor services in Ireland?",
     answer: "Our commitment to accessible, affordable, round-the-clock care, experienced Irish-registered doctors, and a range of specialized services sets us apart."
   },
 
@@ -62,14 +62,14 @@ export const faqItems = [
   },
   {
     question: "How are prescriptions sent to the pharmacy?",
-    answer: "Sozo Digicare does not dispense or deliver prescription medication. If the doctor prescribes medication, the prescription is submitted electronically through a secure service called Healthmail to the pharmacy of your choice. If you select “Home Delivery” we will forward the prescription to one of our partner pharmacies for delivery."
+    answer: "Sozodigicare does not dispense or deliver prescription medication. If the doctor prescribes medication, the prescription is submitted electronically through a secure service called Healthmail to the pharmacy of your choice. If you select “Home Delivery” we will forward the prescription to one of our partner pharmacies for delivery."
   },
   {
     question: "What if I am having an issue at the pharmacy?",
-    answer: "Please advise the pharmacy that the prescription has been sent to the pharmacy's Healthmail email address. If for some reason they have not received it, send an email to contact@SozoDigicare.ie and we will rectify the issue immediately."
+    answer: "Please advise the pharmacy that the prescription has been sent to the pharmacy's Healthmail email address. If for some reason they have not received it, send an email to contact@Sozodigicare.ie and we will rectify the issue immediately."
   },
   {
-    question: "Will I be contacted by Sozo Digicare when my prescription is ready?",
+    question: "Will I be contacted by Sozodigicare when my prescription is ready?",
     answer: "Yes, we will automatically notify you via email and text once your prescription is ready for pick-up or home delivery."
   }
 ];

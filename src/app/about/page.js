@@ -10,7 +10,7 @@ const About = () => {
             About Us
           </h1>
           <p className="mt-6 max-w-3xl mx-auto text-xl text-gray-500">
-            The idea of Sozo DigiCare emerged from a pressing health need that transcends geographical boundaries.
+            The idea of Sozodigicare emerged from a pressing health need that transcends geographical boundaries.
           </p>
         </div>
         <div className="mt-12 grid gap-8 lg:grid-cols-2 lg:gap-16">
@@ -39,7 +39,7 @@ const About = () => {
               <div className="bg-white bg-opacity-75 rounded-lg p-8 max-w-md text-center">
                 <h2 className="text-2xl font-bold text-gray-800">Bridging the Gap</h2>
                 <p className="mt-4 text-gray-600">
-                  By leveraging technological advancements and global networks, Sozo DigiCare endeavors to bridge the gap in healthcare access, ensuring that individuals, regardless of their geographical location or socio-economic status, can access timely, reliable, and life-saving medical consultations and services.
+                  By leveraging technological advancements and global networks, Sozodigicare endeavors to bridge the gap in healthcare access, ensuring that individuals, regardless of their geographical location or socio-economic status, can access timely, reliable, and life-saving medical consultations and services.
                 </p>
               </div>
             </div>
@@ -56,7 +56,7 @@ const About = () => {
             These disparities in healthcare access not only jeopardize individuals' (rich and poor) health outcomes but also contribute to preventable deaths. Addressing this gap in a timely manner, and ensuring prompt medical consultation and services is crucial for saving lives.
           </p>
           <p className="mt-6 text-lg">
-            Through Sozo DigiCare, individuals can overcome geographical barriers, bureaucratic obstacles, and financial constraints to receive the healthcare they urgently need, thus promoting global health equity and improving health outcomes on a worldwide scale. As a Company, Sozo DigiCare offers its clients a broad array of Medical Experts, as well as other supporting team members whose focus is on providing the enabling environment for immediate medical attention needed by these clients.
+            Through Sozodigicare, individuals can overcome geographical barriers, bureaucratic obstacles, and financial constraints to receive the healthcare they urgently need, thus promoting global health equity and improving health outcomes on a worldwide scale. As a Company, Sozodigicare offers its clients a broad array of Medical Experts, as well as other supporting team members whose focus is on providing the enabling environment for immediate medical attention needed by these clients.
           </p>
           <p className="mt-8 text-gray-700 font-bold">
             We look forward to a mutually healthy future! Welcome on Board!

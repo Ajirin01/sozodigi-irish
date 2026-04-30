@@ -69,7 +69,7 @@ function GPConsultationPageContent() {
   }, []);
 
   // Utility function
-    const baseDuration = 900; // 15 mins in seconds
+    const baseDuration = 15; // 15 mins
 
     const getPrice = (duration, discountPercent = 0) => {
         const timeRatio = duration / baseDuration;
@@ -244,16 +244,16 @@ function GPConsultationPageContent() {
                 plans={[
                     {
                         title: "Basic",
-                        price: getPrice(900),
-                        oldPrice: getOldPrice(900),
-                        duration: 900,
+                        price: getPrice(15),
+                        oldPrice: getOldPrice(15),
+                        duration: 15,
                         features: ["Duration: 15 mins", "Quick call", "Summary"],
                     },
                     {
                         title: "Delux",
-                        price: getPrice(2700, 10),
-                        oldPrice: getOldPrice(2700),
-                        duration: 2700,
+                        price: getPrice(45, 10),
+                        oldPrice: getOldPrice(45),
+                        duration: 45,
                         features: [
                             "Duration: 45 mins",
                             "10% OFF",
@@ -265,9 +265,9 @@ function GPConsultationPageContent() {
                     },
                     {
                         title: "Premium",
-                        price: getPrice(3600, 20),
-                        oldPrice: getOldPrice(3600),
-                        duration: 3600,
+                        price: getPrice(60, 20),
+                        oldPrice: getOldPrice(60),
+                        duration: 60,
                         features: [
                             "Duration: 60 mins",
                             "20% OFF",

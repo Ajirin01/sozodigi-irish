@@ -7,14 +7,14 @@ const DataPolicy = () => {
     <div className="min-h-screen bg-gray-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="bg-white shadow-lg rounded-lg p-8 sm:p-10 lg:p-12 w-full max-w-4xl">
         <h1 className="text-4xl font-extrabold text-primary-7 mb-6 text-center">
-          Sozo Digicare Data Policy
+          Sozodigicare Data Policy
         </h1>
 
         <section className="text-base text-gray-600 leading-relaxed space-y-6">
           <div>
             <h2 className="text-2xl font-semibold text-[var(--color-primary-6)] mb-2">1. Introduction</h2>
             <p>
-              Sozo Digicare is committed to protecting the privacy and security of our users and their data.
+              Sozodigicare is committed to protecting the privacy and security of our users and their data.
               This policy outlines how we collect, store, and use personal data in compliance with GDPR and HIPAA.
             </p>
           </div>
@@ -92,8 +92,8 @@ const DataPolicy = () => {
             <h2 className="text-2xl font-semibold text-[var(--color-primary-6)] mb-2">7. Contact Information</h2>
             <p>
               If you have any questions or concerns, please contact us at: <br />
-              <a href="mailto:contact@SozoDigicare.ie" className="text-[var(--color-primary-6)] underline">
-                contact@SozoDigicare.ie
+              <a href="mailto:contact@Sozodigicare.ie" className="text-[var(--color-primary-6)] underline">
+                contact@Sozodigicare.ie
               </a>
             </p>
           </div>

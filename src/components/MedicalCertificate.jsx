@@ -27,10 +27,10 @@ const MedicalCertificate = ({
           <div className="mb-10">
             <img
               src="/images/logo/logo.png"
-              alt="Sozo Digicare"
+              alt="Sozodigicare"
               className="h-12 mx-auto mb-2"
             />
-            <h2 className="text-base sm:text-lg font-extrabold uppercase tracking-widest text-blue-900">Sozo Digicare</h2>
+            <h2 className="text-base sm:text-lg font-extrabold uppercase tracking-widest text-blue-900">Sozodigicare</h2>
             <p className="text-xs text-gray-500 uppercase tracking-tighter">Verified Medical Documentation</p>
             
             <h1

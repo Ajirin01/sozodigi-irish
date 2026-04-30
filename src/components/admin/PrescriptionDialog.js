@@ -42,11 +42,11 @@ const PrescriptionDialog = ({
               {prescriptions.map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-3 border border-gray-100 rounded-xl mb-2 bg-gray-50"
+                  className="flex items-center justify-between p-3 border border-gray-100 dark:border-gray-800 rounded-xl mb-2 bg-gray-50 dark:bg-gray-800/50"
                 >
                   <div>
-                    <p className="font-semibold text-gray-800">{item.medication}</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="font-semibold text-gray-800 dark:text-white">{item.medication}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       {item.dosage} – {item.frequency}
                     </p>
                   </div>
@@ -63,9 +63,9 @@ const PrescriptionDialog = ({
             <p className="text-gray-500 mb-4 text-sm italic">No prescriptions added in this session.</p>
           )}
 
-          <div className="space-y-3 p-4 bg-gray-50 rounded-2xl border border-gray-200">
+          <div className="space-y-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700">
             <input
-              className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
+              className="w-full p-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-green-500 outline-none bg-white dark:bg-gray-800 dark:text-white"
               placeholder="Medication Name"
               value={newPrescription.medication}
               onChange={(e) =>
@@ -73,7 +73,7 @@ const PrescriptionDialog = ({
               }
             />
             <input
-              className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
+              className="w-full p-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-green-500 outline-none bg-white dark:bg-gray-800 dark:text-white"
               placeholder="Dosage (e.g. 500mg)"
               value={newPrescription.dosage}
               onChange={(e) =>
@@ -81,7 +81,7 @@ const PrescriptionDialog = ({
               }
             />
             <input
-              className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
+              className="w-full p-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-green-500 outline-none bg-white dark:bg-gray-800 dark:text-white"
               placeholder="Frequency (e.g. Twice Daily)"
               value={newPrescription.frequency}
               onChange={(e) =>
@@ -89,7 +89,7 @@ const PrescriptionDialog = ({
               }
             />
             <button
-              className="w-full mt-2 bg-green-600 text-white px-4 py-3 rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg shadow-green-100"
+              className="w-full mt-2 bg-green-600 text-white px-4 py-3 rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg shadow-green-100 dark:shadow-none"
               onClick={handleAddPrescription}
             >
               {savingPrescription ? 'Adding...' : 'Add Prescription'}

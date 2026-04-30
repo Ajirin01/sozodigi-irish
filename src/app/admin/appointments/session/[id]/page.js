@@ -65,6 +65,10 @@ const SessionPage = () => {
   const [sessionNotes, setSessionNotes] = useState("");
   const [savingNotes, setSavingNotes] = useState(false);
 
+  const [isMedicalTourism, setIsMedicalTourism] = useState(false);
+  const [recommendedHospital, setRecommendedHospital] = useState("");
+  const [hospitals, setHospitals] = useState([]);
+
   const [prescriptions, setPrescriptions] = useState([]);
   const [savingPrescription, setSavingPrescription] = useState(false);
   const [showCertDialog, setShowCertDialog] = useState(false);
@@ -109,9 +113,14 @@ const SessionPage = () => {
     
     const handlePatientEndRequest = ({ appointmentId }) => {
       const currentAppointment = appointmentRef.current;
-      const isPatient = currentAppointment?.session?.user?._id === session?.user?.id;
+      // We check if this socket is the user (patient) of the appointment
+      const patientId = currentAppointment?.session?.user?._id || currentAppointment?.session?.patient?._id || currentAppointment?.session?.user || currentAppointment?.session?.patient;
+      const isPatient = patientId === session?.user?.id;
       
-      if (isPatient && userRole === "user" && currentAppointment?.session?.appointment?._id === appointmentId) {
+      console.log("[EndSession Debug] handlePatientEndRequest:", { appointmentId, isPatient, userRole });
+
+      // Only show the confirmation dialog to the patient
+      if (isPatient && userRole === "user" && (currentAppointment?.session?.appointment?._id === appointmentId || currentAppointment?.session?.appointment === appointmentId)) {
         setShowConfirmEnd(true);
       }
     };
@@ -223,8 +232,12 @@ const SessionPage = () => {
         // console.log(response.success && response.session)
         if (response.success && response.session) {
           setSessionNotes(response.session.sessionNotes || '');
+          setIsMedicalTourism(response.session.isMedicalTourism || false);
+          setRecommendedHospital(response.session.recommendedHospital?._id || response.session.recommendedHospital || "");
         } else {
           setSessionNotes('');
+          setIsMedicalTourism(false);
+          setRecommendedHospital("");
         }
       } catch (error) {
         console.error('Failed to fetch documentation:', error);
@@ -234,6 +247,14 @@ const SessionPage = () => {
   
     if (showDocs) {
       fetchDocumentation();
+      // Also fetch hospitals if not already loaded
+      if (hospitals.length === 0) {
+        fetchData('hospitals', token).then(res => {
+          if (res.success || res.data) {
+            setHospitals(res.data || res);
+          }
+        }).catch(err => console.error("Failed to fetch hospitals", err));
+      }
     }
   }, [showDocs]);
 
@@ -304,7 +325,11 @@ const SessionPage = () => {
       setSavingNotes(true);
       await updateData(
         `video-sessions/${currentAppointment.session._id}`,
-        { sessionNotes },
+        { 
+          sessionNotes,
+          isMedicalTourism,
+          recommendedHospital: isMedicalTourism ? recommendedHospital : null
+        },
         token
       );
       addToast("Notes saved successfully!", "success");
@@ -507,7 +532,10 @@ const SessionPage = () => {
         </div>
 
         <div className="absolute top-10 left-1/2 -translate-x-1/2 text-white z-[99999999] bg-black/60 backdrop-blur px-4 py-2 rounded">
-           { userRole === "user" ? `Consultant: ${appointment.session.specialist.firstName} ${appointment.session.specialist.lastName}` : `Patient: ${appointment.session.user.firstName} ${appointment.session.user.lastName}`}
+           { userRole === "user" 
+             ? `Consultant: ${appointment.session.specialist?.firstName || appointment.session.consultant?.firstName || appointment.session.specialistId?.firstName || ""} ${appointment.session.specialist?.lastName || appointment.session.consultant?.lastName || appointment.session.specialistId?.lastName || ""}` 
+             : `Patient: ${appointment.session.user?.firstName || appointment.session.patient?.firstName || ""} ${appointment.session.user?.lastName || appointment.session.patient?.lastName || ""}`
+           }
         </div>
 
 
@@ -589,6 +617,11 @@ const SessionPage = () => {
           savingNotes={savingNotes}
           patientId={appointment?.session?.user?._id || appointment?.session?.user}
           token={token}
+          isMedicalTourism={isMedicalTourism}
+          setIsMedicalTourism={setIsMedicalTourism}
+          recommendedHospital={recommendedHospital}
+          setRecommendedHospital={setRecommendedHospital}
+          hospitals={hospitals}
         />
 
         <PrescriptionDialog

@@ -42,13 +42,13 @@ const LabReferralDialog = ({
               {labReferrals.map((ref, index) => (
                 <div
                   key={index}
-                  className="p-3 border border-gray-100 rounded-xl flex justify-between items-start bg-gray-50"
+                  className="p-3 border border-gray-100 dark:border-gray-800 rounded-xl flex justify-between items-start bg-gray-50 dark:bg-gray-800/50"
                 >
                   <div className="text-sm">
-                    <p className="font-bold text-gray-800">{ref.testName}</p>
-                    <p className="text-xs text-blue-600 font-medium uppercase">{ref.status}</p>
-                    {ref.labName && <p className="text-gray-600 mt-1">Lab: {ref.labName}</p>}
-                    {ref.note && <p className="text-gray-500 text-xs italic mt-1">"{ref.note}"</p>}
+                    <p className="font-bold text-gray-800 dark:text-white">{ref.testName}</p>
+                    <p className="text-xs text-blue-600 dark:text-blue-400 font-medium uppercase">{ref.status}</p>
+                    {ref.labName && <p className="text-gray-600 dark:text-gray-400 mt-1">Lab: {ref.labName}</p>}
+                    {ref.note && <p className="text-gray-500 dark:text-gray-500 text-xs italic mt-1">"{ref.note}"</p>}
                   </div>
                   <button
                     onClick={() => handleDeleteReferral(index)}
@@ -63,27 +63,27 @@ const LabReferralDialog = ({
             <p className="text-gray-500 mb-4 text-sm italic">No lab referrals added in this session.</p>
           )}
 
-          <div className="space-y-3 p-4 bg-gray-50 rounded-2xl border border-gray-200">
+          <div className="space-y-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700">
             <input
-              className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full p-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-gray-800 dark:text-white"
               placeholder="Test Name (e.g. Full Blood Count)"
               value={newReferral.testName}
               onChange={(e) => setNewReferral({ ...newReferral, testName: e.target.value })}
             />
             <input
-              className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full p-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-gray-800 dark:text-white"
               placeholder="Lab Name (optional)"
               value={newReferral.labName}
               onChange={(e) => setNewReferral({ ...newReferral, labName: e.target.value })}
             />
             <input
-              className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full p-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-gray-800 dark:text-white"
               placeholder="Doctor's Instruction (optional)"
               value={newReferral.note}
               onChange={(e) => setNewReferral({ ...newReferral, note: e.target.value })}
             />
             <select
-              className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full p-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white dark:bg-gray-800 dark:text-white"
               value={newReferral.status}
               onChange={(e) => setNewReferral({ ...newReferral, status: e.target.value })}
             >
@@ -93,7 +93,7 @@ const LabReferralDialog = ({
             </select>
 
             <button
-              className="w-full mt-2 bg-blue-600 text-white px-4 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-100"
+              className="w-full mt-2 bg-blue-600 text-white px-4 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 dark:shadow-none"
               onClick={handleAddReferral}
             >
               {savingReferral ? 'Adding...' : 'Add Lab Referral'}

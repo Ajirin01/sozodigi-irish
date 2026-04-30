@@ -13,7 +13,7 @@ const defaultPlans = [
   {
     title: "Basic",
     price: 20,
-    duration: 900,
+    duration: 15,
     features: ["Duration: 15 mins", "Quick call","Report",
       "Follow-up",
       "Pharmacy Referral",
@@ -22,7 +22,7 @@ const defaultPlans = [
   {
     title: "Delux",
     price: 40,
-    duration: 2700,
+    duration: 45,
     features: [
       "Duration: 45 mins",
       "10% OFF",
@@ -36,7 +36,7 @@ const defaultPlans = [
   {
     title: "Premium",
     price: 70,
-    duration: 3600,
+    duration: 60,
     features: [
       "Duration: 60 mins",
       "20% OFF",

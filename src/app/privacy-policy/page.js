@@ -7,7 +7,7 @@ const PrivacyPolicy = () => {
         <h1 className="text-4xl font-extrabold text-primary-7 mb-6 text-center">Privacy Policy</h1>
 
         <p className="text-base text-gray-700 mb-6">
-          At Sozo Digicare, we are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. This Privacy Policy outlines how we collect, use, disclose, and safeguard your information when you use our services. By accessing or using our services, you agree to the terms of this Privacy Policy.
+          At Sozodigicare, we are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. This Privacy Policy outlines how we collect, use, disclose, and safeguard your information when you use our services. By accessing or using our services, you agree to the terms of this Privacy Policy.
         </p>
 
         <h2 className="text-2xl font-semibold text-[var(--color-primary-6)] mb-4">1. Information We Collect</h2>
@@ -87,7 +87,7 @@ const PrivacyPolicy = () => {
         <h2 className="text-2xl font-semibold text-[var(--color-primary-6)] mb-4">11. Contact Us</h2>
         <p className="text-gray-700 mb-6">
           If you have questions or concerns about our privacy practices, contact us at:
-          <br /> <strong>Email:</strong> contact@SozoDigicare.ie
+          <br /> <strong>Email:</strong> contact@Sozodigicare.ie
         </p>
 
         <p className="text-sm text-gray-500 text-right">Effective Date: May 2025</p>
