@@ -550,14 +550,14 @@ export default function Ecommerce() {
                 <div className="mt-4 md:mt-0 flex space-x-3">
                   <button 
                     onClick={handleCreateAppointments}
-                    className="bg-white text-[var(--color-primary-7)] px-4 py-2 rounded-lg font-medium shadow-sm hover:shadow-md transition-all flex items-center"
+                    className="bg-white text-[var(--color-primary-7)] px-4 py-2 rounded-lg font-medium shadow-sm hover:shadow-md transition-all flex items-center whitespace-nowrap"
                   >
                     <CalculatorIcon className="mr-2" />
                     Book an Appointment 
                   </button>
                   <button 
                     onClick={handleConsultGP}
-                    className="bg-white/20 text-white border border-white/40 px-4 py-2 rounded-lg font-medium shadow-sm hover:bg-white/30 transition-all flex items-center"
+                    className="bg-white/20 text-white border border-white/40 px-4 py-2 rounded-lg font-medium shadow-sm hover:bg-white/30 transition-all flex items-center whitespace-nowrap"
                   >
                     <FaUserMd className="mr-2" />
                     Consult GP now

@@ -2,6 +2,7 @@
 
 const specialistSpecialties = [
     'Internal Medicine',
+    'General Practice',
     'Family Medicine',
     'Pediatrics',
     'Obstetrics & Gynecology',

@@ -367,7 +367,7 @@ export default function TopNav({}) {
 
         {/* Footer */}
         <div className="px-4 py-5 text-center text-xs text-gray-400 border-t">
-          © 2025 SozoDigiCare
+          © 2025 Sozodigicare
         </div>
 
         <LogoutModal

@@ -50,7 +50,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {/* Logo & About */}
           <div className="flex flex-col gap-y-4">
-            <Image src={logoDark} alt="SozoDigiCare" width={200} height={60} className="mb-2" />
+            <Image src={logoDark} alt="Sozodigicare" width={200} height={60} className="mb-2" />
             <p className="text-white/80 text-sm mb-4 max-w-xs">
               Bridging the gap between advanced healthcare and accessibility through innovative solutions.
             </p>

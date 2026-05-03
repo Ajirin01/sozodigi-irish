@@ -16,7 +16,7 @@ export default function testimonial(){
                     <p>
                       <i className="bi bi-quote quote-icon-left"></i>
                       <span>
-                        "The service provided by SozoDigiCare was exceptional. The booking process was smooth, and the consultation was thorough and highly professional. I feel well cared for and informed about my health options." - Michael Thompson
+                        "The service provided by Sozodigicare was exceptional. The booking process was smooth, and the consultation was thorough and highly professional. I feel well cared for and informed about my health options." - Michael Thompson
                       </span>
                       <i className="bi bi-quote quote-icon-right"></i>
                     </p>
@@ -31,7 +31,7 @@ export default function testimonial(){
                     <p>
                       <i className="bi bi-quote quote-icon-left"></i>
                       <span>
-                        "I had the most comfortable experience with SozoDigiCare. Their team was very understanding and professional. They provided me with the best options, and I’m now well on my way to recovery." - Linda Roberts
+                        "I had the most comfortable experience with Sozodigicare. Their team was very understanding and professional. They provided me with the best options, and I’m now well on my way to recovery." - Linda Roberts
                       </span>
                       <i className="bi bi-quote quote-icon-right"></i>
                     </p>
@@ -46,7 +46,7 @@ export default function testimonial(){
                     <p>
                       <i className="bi bi-quote quote-icon-left"></i>
                       <span>
-                        "The medical staff at SozoDigiCare were incredibly supportive. They helped me through every step of my treatment, and their telemedicine services made it easy for me to access care, even from home." - David Green
+                        "The medical staff at Sozodigicare were incredibly supportive. They helped me through every step of my treatment, and their telemedicine services made it easy for me to access care, even from home." - David Green
                       </span>
                       <i className="bi bi-quote quote-icon-right"></i>
                     </p>
@@ -61,7 +61,7 @@ export default function testimonial(){
                     <p>
                       <i className="bi bi-quote quote-icon-left"></i>
                       <span>
-                        "SozoDigiCare’s team was very caring and attentive. I felt like I was in good hands throughout my entire consultation. I highly recommend them for anyone in need of quality healthcare." - Emily Davis
+                        "Sozodigicare’s team was very caring and attentive. I felt like I was in good hands throughout my entire consultation. I highly recommend them for anyone in need of quality healthcare." - Emily Davis
                       </span>
                       <i className="bi bi-quote quote-icon-right"></i>
                     </p>
@@ -76,7 +76,7 @@ export default function testimonial(){
                     <p>
                       <i className="bi bi-quote quote-icon-left"></i>
                       <span>
-                        "My experience with SozoDigiCare has been wonderful. They have a user-friendly platform, and the medical professionals are top-notch. The whole process was seamless, and I felt well-supported." - John Wilson
+                        "My experience with Sozodigicare has been wonderful. They have a user-friendly platform, and the medical professionals are top-notch. The whole process was seamless, and I felt well-supported." - John Wilson
                       </span>
                       <i className="bi bi-quote quote-icon-right"></i>
                     </p>

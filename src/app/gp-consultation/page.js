@@ -29,8 +29,7 @@ import {
 } from "@/components/gabriel";
 import ModalContainer from "@/components/gabriel/ModalContainer";
 
-import io from 'socket.io-client';
-const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
+import { getSocket } from "@/lib/socket";
 
 function GPConsultationPageContent() {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,12 +53,12 @@ function GPConsultationPageContent() {
   }, [searchParams]);
 
   useEffect(() => {
+    const socket = getSocket();
     socket.emit("get-online-specialists");
 
     socket.on("update-specialists", (data) => {
-        console.log(data)
+        console.log("Online specialists received:", data);
         const gpsOnly = data.filter((specialist) => specialist.category === "General Practitioner");
-        // console.log(gpsOnly)
         setOnlineGPs(gpsOnly);
     });
 
@@ -226,7 +225,7 @@ function GPConsultationPageContent() {
             <X size={20} />
           </button>
           <div className="w-full">
-            <ConsultationBookingPageContent showSpecialistCategories={false} />
+            <ConsultationBookingPageContent showSpecialistCategories={false} targetCategory="general" />
           </div>
         </div>
       </Dialog>

@@ -200,7 +200,7 @@ const PricingModal = ({
               <p className="text-sm text-gray-600 mb-6">
                 By proceeding with consultation, users acknowledge that
                 time-based sessions may conclude early upon mutual consent,
-                and SozoDigiCare holds no responsibility for time not used
+                and Sozodigicare holds no responsibility for time not used
                 after such agreement.
               </p>
               <div className="flex justify-end gap-3">

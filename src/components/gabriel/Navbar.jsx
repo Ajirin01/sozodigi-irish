@@ -645,7 +645,7 @@ const Navbar = ({ className, onMenuClick }) => {
                 `}
                 style={{ transitionDelay: '350ms' }}
               >
-                <p>© {new Date().getFullYear()} SozoDigiCare</p>
+                <p>© {new Date().getFullYear()} Sozodigicare</p>
               </div>
             </div>
           </div>

@@ -56,7 +56,7 @@ const MedicalTourism = () => {
         <img src={medicalTourismHero.src} alt="Medical Tourism Hero" className='absolute h-full w-full object-cover' />
         <div className="absolute inset-0 bg-black/50 z-10"></div>
         <div className="relative z-10 text-center text-white">
-          <h1 className="text-6xl font-bold mb-4">Welcome to SozoDigiCare</h1>
+          <h1 className="text-6xl font-bold mb-4">Welcome to Sozodigicare</h1>
           <p className="text-2xl mb-8">Your Trusted Medical Tourism Partner</p>
         </div>
       </div>
@@ -190,9 +190,9 @@ const MedicalTourism = () => {
           </div>
         </section>
 
-        {/* Why Choose SozoDigiCare */}
+        {/* Why Choose Sozodigicare */}
         <section className="mb-20">
-          <h2 className="text-4xl font-bold mb-12 text-center">Why Choose SozoDigiCare?</h2>
+          <h2 className="text-4xl font-bold mb-12 text-center">Why Choose Sozodigicare?</h2>
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-l from-green-400 to-blue-500 transform -skew-y-3"></div>
             <div className="relative bg-white p-8 shadow-lg">
@@ -213,7 +213,7 @@ const MedicalTourism = () => {
           <h2 className="text-4xl font-bold mb-12 text-center">Patient Testimonials</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              { name: "Eunice Ebuala", procedure: "Surgery", location: "Thailand", quote: "SozoDigiCare made my entire medical tourism journey smooth and stress-free. From coordinating my surgery in Thailand to arranging my accommodation, everything was perfectly handled." },
+              { name: "Eunice Ebuala", procedure: "Surgery", location: "Thailand", quote: "Sozodigicare made my entire medical tourism journey smooth and stress-free. From coordinating my surgery in Thailand to arranging my accommodation, everything was perfectly handled." },
               { name: "Rice Strandford", procedure: "Dental Care", location: "Mexico", quote: "Thanks to the team, I received top-quality dental care in Mexico and saved thousands. I felt supported every step of the way." },
             ].map((testimonial, index) => (
               <div key={index} className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105">

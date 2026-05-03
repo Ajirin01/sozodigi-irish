@@ -37,7 +37,7 @@ import { loadStripe } from '@stripe/stripe-js'
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
 
-const ConsultationBookingPageContent = ({showSpecialistCategories}) => {
+const ConsultationBookingPageContent = ({showSpecialistCategories, targetCategory}) => {
   const dispatch = useDispatch();
 
   // console.log(!showSpecialistCategories)
@@ -122,7 +122,6 @@ const ConsultationBookingPageContent = ({showSpecialistCategories}) => {
         fetchAvailableSlots()
       }
     }
-    
   }, [selectedDate, specialistsByCategory, token])
 
   const fetchSpecialistCategories = async () => {
@@ -143,7 +142,18 @@ const ConsultationBookingPageContent = ({showSpecialistCategories}) => {
         members,
       }))
 
-      if(!showSpecialistCategories){
+      if(targetCategory){
+        let targetDocs = grouped[targetCategory] || [];
+        if (targetCategory === 'general') {
+          targetDocs = [
+            ...(grouped['general'] || []),
+            ...(grouped['General Practice'] || []),
+            ...(grouped['General Practitioner'] || []),
+            ...(grouped['Uncategorized'] || [])
+          ];
+        }
+        setSpecialistsByCategory(targetDocs)
+      } else if (!showSpecialistCategories) {
         setSpecialistsByCategory(res)
       }
 
@@ -187,54 +197,47 @@ const ConsultationBookingPageContent = ({showSpecialistCategories}) => {
 
       const allSlots = [];
   
-      // 1. Fetch appointments for selected date
-      const appointmentRes = await fetchData(
-        `consultation-appointments/all/no/pagination/?dateFrom=${selectedDateString}&dateTo=${selectedDateString}`,
-        token
-      );
-      const bookedAppointments = appointmentRes || [];
+      // 1. Fetch appointments for selected date (isolated so failures don't block slot loading)
+      let bookedSlotIds = new Set();
+      try {
+        const appointmentRes = await fetchData(
+          `consultation-appointments/all/no/pagination?dateFrom=${selectedDateString}&dateTo=${selectedDateString}`,
+          token
+        );
+        const bookedAppointments = Array.isArray(appointmentRes) ? appointmentRes : [];
+        bookedSlotIds = new Set(
+          bookedAppointments.map((appointment) => appointment.slot?._id).filter(Boolean)
+        );
+      } catch (apptErr) {
+        console.warn('Could not fetch booked appointments (non-fatal):', apptErr.message);
+      }
   
-      // 2. Create a set of booked slot IDs for fast lookup
-      const bookedSlotIds = new Set(
-        bookedAppointments.map((appointment) => appointment.slot?._id)
-      );
-  
-      // 3. Loop through all specialists in the selected category
+      // 2. Loop through all specialists in the selected category
       for (const specialist of specialistsByCategory) {
         const res = await fetchData(
           `availabilities/slots/by?userRole=specialist&consultantId=${specialist._id}&isBooked=false`,
           token
         );
   
-        const filtered = res.data.filter((slot) => {
+        const filtered = (res.data || []).filter((slot) => {
           const slotId = slot._id;
           if (bookedSlotIds.has(slotId)) return false; // Exclude already booked slots
   
-          if (!showSpecialistCategories) {
-            if (slot.category !== "cert") return false;
-  
-            if (slot.type === 'recurring') {
-              return slot.dayOfWeek === selectedDayName;
-            } else if (slot.type === 'one-time') {
-              const parsedDate = format(new Date(slot.date), 'yyyy-MM-dd');
-              const rawDateString = typeof slot.date === 'string' ? slot.date.substring(0, 10) : parsedDate;
-              return parsedDate === selectedDateString || rawDateString === selectedDateString;
-            }
-          } else {
-            if (slot.category !== "general") return false;
-  
-            if (slot.type === 'recurring') {
-              return slot.dayOfWeek === selectedDayName;
-            } else if (slot.type === 'one-time') {
-              const parsedDate = format(new Date(slot.date), 'yyyy-MM-dd');
-              const rawDateString = typeof slot.date === 'string' ? slot.date.substring(0, 10) : parsedDate;
-              return parsedDate === selectedDateString || rawDateString === selectedDateString;
-            }
+          const filterCategory = targetCategory || (showSpecialistCategories ? 'general' : 'cert');
+          if (slot.category !== filterCategory) return false;
+
+          if (slot.type === 'recurring') {
+            return slot.dayOfWeek === selectedDayName;
+          } else if (slot.type === 'one-time') {
+            // Parse date using LOCAL time components to avoid UTC offset shifting the day
+            const d = new Date(slot.date);
+            const slotDateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            return slotDateStr === selectedDateString;
           }
   
           return false;
         });
-
+  
         // 4. Filter out slots that have already passed if the date is today
         const now = new Date();
         const finalFiltered = filtered.filter((slot) => {
@@ -280,10 +283,8 @@ const ConsultationBookingPageContent = ({showSpecialistCategories}) => {
       const endDate = `${year}-${String(monthIdx + 1).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
       
       // Determine category filter
-      let category = "general";
-      if (!showSpecialistCategories) {
-        category = "cert";
-      } else if (selectedCategory) {
+      let category = targetCategory || (showSpecialistCategories ? "general" : "cert");
+      if (selectedCategory) {
         category = selectedCategory.name.toLowerCase().includes('cert') ? 'cert' : 'general';
       }
 
@@ -482,7 +483,8 @@ const ConsultationBookingPageContent = ({showSpecialistCategories}) => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 relative">
+
           {loadingSlots ? (
             <div className="flex justify-center items-center h-32">
               <div className="w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>

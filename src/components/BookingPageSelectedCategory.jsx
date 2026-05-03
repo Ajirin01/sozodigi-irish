@@ -266,9 +266,11 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, selectedCateg
     dispatch(resetBooking());
   };
 
-  if(!session){
-    router.push("/login")
-  }
+  useEffect(() => {
+    if (mounted && session === null) {
+      router.push("/login")
+    }
+  }, [session, mounted, router]);
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-0">

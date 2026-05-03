@@ -10,7 +10,9 @@ import specialistSpecialties from '@/utils/specialistSpecialties';
 import PhoneInput from 'react-phone-input-2';
 import { getData } from 'country-list';
 import Link from 'next/link';
-import { FaUser, FaBriefcase, FaUniversity, FaArrowLeft, FaCloudUploadAlt } from 'react-icons/fa';
+import { FaUser, FaBriefcase, FaUniversity, FaArrowLeft, FaCloudUploadAlt, FaCalendarAlt } from 'react-icons/fa';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 const formInput =
   "border-[3px] border-primary-5 text-primary-2 rounded-[20px] overflow-hidden p-2 w-full";
@@ -213,9 +215,25 @@ export default function CompleteProfilePage() {
                 <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Last Name <span className="text-red-500">*</span></label>
                 <input name="lastName" value={formData.lastName} onChange={handleChange} className={inputStyle} required placeholder="Doe" />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 flex flex-col">
                 <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Date of Birth <span className="text-red-500">*</span></label>
-                <input name="DOB" value={formData.DOB} onChange={handleChange} className={inputStyle} required type="date" />
+                <div className="relative">
+                  <DatePicker
+                    selected={formData.DOB ? new Date(formData.DOB) : null}
+                    onChange={(date) => setFormData(prev => ({ ...prev, DOB: date }))}
+                    className={`${inputStyle} pl-10`}
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText="Select your date of birth"
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    yearDropdownItemNumber={100}
+                    scrollableYearDropdown
+                    maxDate={new Date()}
+                    required
+                  />
+                  <FaCalendarAlt className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Phone Number <span className="text-red-500">*</span></label>

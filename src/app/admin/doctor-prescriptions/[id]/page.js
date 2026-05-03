@@ -73,13 +73,25 @@ const PrescriptionReceipt = () => {
             </div> */}
 
             {/* Header Logo */}
+            <div className="flex justify-between items-start mb-4 z-10 relative">
+                <div className="text-left">
+                  <Image src="/images/logo/logo.png" alt="Logo" width={120} height={120} className="mb-2" />
+                  <p>11 The Avenue Folkstown Park. <br /> Balbriggan Co Dublin.</p>
+                </div>
+                <div className="text-right">
+                  <img 
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`} 
+                    alt="Prescription QR Code" 
+                    width={100} 
+                    height={100}
+                    className="border p-1 bg-white"
+                  />
+                  <p className="text-[10px] text-gray-500 mt-1">Scan to verify</p>
+                </div>
+            </div>
+            
             <div className="text-center mb-4 z-10 relative">
-                <Image src="/images/logo/logo.png" alt="Logo" width={120} height={120} className="mx-auto mb-2" />
-                <p>11 The Avenue Folkstown Park. <br /> Balbriggan Co Dublin.</p>
-
-                <br />
                 <h2 className="text-xl font-semibold">Medical Prescription</h2>
-
             </div>
 
             <div className="z-10 relative mb-20">
