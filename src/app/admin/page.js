@@ -25,7 +25,7 @@ import { fetchData } from "@/utils/api";
 import { triggerChatbotAttention, openChatBot } from "@/store/popUpSlice";
 import { useDispatch } from "react-redux";
 import RecentTransactions from "@/components/admin/ecommerce/RecentTransactions";
-import { CURRENCY_SYMBOL } from "@/utils/currency";
+import { CURRENCY_SYMBOL, CURRENCY_CODE } from "@/utils/currency";
 
 import { setPrice, setSpecialist, setDuration } from '@/store/specialistSlice';
 import { CalculatorIcon, CheckCircle, X } from "lucide-react";
@@ -466,9 +466,9 @@ export default function Ecommerce() {
     },
     {
       title: "Earning",
-      value: `${CURRENCY_SYMBOL}${calls.reduce((total, call) => total + (call.appointment?.price || 0) * 2, 0)}`,
+      value: `${CURRENCY_SYMBOL}${calls.reduce((total, call) => total + (call.appointment?.price || 0), 0).toFixed(2)}`,
       change: calls.length > 0
-        ? `Last: ${CURRENCY_SYMBOL}${(calls[calls.length - 1].durationInMinutes || 0) * 2}`
+        ? `Last: ${CURRENCY_SYMBOL}${(calls[calls.length - 1].appointment?.price || 0).toFixed(2)}`
         : "No past earning",
       icon: <FaMoneyBill className="text-blue-600" size={20} />,
       bgColor: "bg-blue-50",
@@ -875,7 +875,7 @@ export default function Ecommerce() {
                     setPrice={(p) => dispatch(setPrice(p))}
                     setDuration={(d) => dispatch(setDuration(d))}
                     specialist={() => useSelector((state) => state.specialist.specialist)}
-                    currency="EUR"
+                    currency={CURRENCY_CODE}
                     plans={[
                         {
                             title: "Basic",
@@ -926,7 +926,7 @@ export default function Ecommerce() {
               modal={
                 <CheckoutModal
                   closeModal={closeDialog}
-                  currency="USD"
+                  currency={CURRENCY_CODE}
                   duration={() => useSelector(state => state.specialist.duration)}
                   date={new Date()}
                   consultMode="now"

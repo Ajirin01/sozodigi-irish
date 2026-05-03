@@ -30,6 +30,7 @@ import {
   CheckoutModal,
   FindSpecialistModal,
 } from "@/components/gabriel";
+import { CURRENCY_CODE, CURRENCY_SYMBOL } from "@/utils/currency";
 
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
@@ -337,7 +338,7 @@ const ConsultationBookingPageContent = () => {
                     <div className="flex justify-between items-center mb-1">
                       <span className="font-bold text-gray-800">{slot.startTime} - {slot.endTime}</span>
                       <span className="text-xs font-medium px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full">
-                        ${getMinutesDifference(slot.startTime, slot.endTime) * COST_PER_MINUTE}
+                        {CURRENCY_SYMBOL}{getMinutesDifference(slot.startTime, slot.endTime) * COST_PER_MINUTE}
                       </span>
                     </div>
                     <div className="text-sm text-gray-600 flex items-center gap-2">
@@ -392,7 +393,7 @@ const ConsultationBookingPageContent = () => {
                 <CheckoutModal
                   closeModal={closeModal}
                   amount={price}
-                  currency="USD"
+                  currency={CURRENCY_CODE}
                   duration={duration}
                   date={new Date(selectedSlot.date)}
                   consultMode="appointment"
