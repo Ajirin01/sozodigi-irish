@@ -547,7 +547,7 @@ export default function Ecommerce() {
                     </p>
                   )}
                 </div>
-                <div className="mt-4 md:mt-0 flex space-x-3">
+                <div className="mt-4 md:mt-0 flex flex-wrap gap-3">
                   <button 
                     onClick={handleCreateAppointments}
                     className="bg-white text-[var(--color-primary-7)] px-4 py-2 rounded-lg font-medium shadow-sm hover:shadow-md transition-all flex items-center whitespace-nowrap"
@@ -587,7 +587,7 @@ export default function Ecommerce() {
                     </p>
                   )}
                 </div>
-                <div className="mt-4 md:mt-0 flex space-x-3">
+                <div className="mt-4 md:mt-0 flex flex-wrap gap-3">
                   <button 
                     onClick={handleAppointments}
                     className="bg-white text-[var(--color-primary-7)] px-4 py-2 rounded-lg font-medium shadow-sm hover:shadow-md transition-all flex items-center"
@@ -627,7 +627,7 @@ export default function Ecommerce() {
                   )}
                 </div>
 
-                <div className="mt-4 md:mt-0 flex space-x-3">
+                <div className="mt-4 md:mt-0 flex flex-wrap gap-3">
                   {labExists ? (
                     <>
                       <button 
