@@ -181,9 +181,27 @@ const PricingModal = ({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {plans.map((plan, idx) => (
-                <PricingCard key={idx} {...plan} />
-              ))}
+              {plans.map((plan, idx) => {
+                // Normalize duration: if >= 60 assume it's in seconds, convert to minutes
+                const planDurationMinutes = plan.duration >= 60 ? plan.duration / 60 : plan.duration;
+
+                // specialist.consultationDuration only updates display label, NOT the actual duration
+                const displayLabel = specialist?.consultationDuration || planDurationMinutes;
+                const features = [...plan.features];
+                const durationIndex = features.findIndex(f => f.toLowerCase().includes("duration"));
+                if (durationIndex !== -1) {
+                  features[durationIndex] = `Duration: ${displayLabel} mins`;
+                }
+
+                return (
+                  <PricingCard
+                    key={idx}
+                    {...plan}
+                    duration={planDurationMinutes}  // always the plan's own duration in minutes
+                    features={features}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
