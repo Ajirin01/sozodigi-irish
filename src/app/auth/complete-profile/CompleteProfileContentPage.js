@@ -145,7 +145,8 @@ export default function CompleteProfilePage() {
       } else {
         alertSuccess('Profile updated successfully!');
         // router.push("/admin");
-        window.location.href = "/admin"
+        const callbackUrl = searchParams.get('callbackUrl') || '/admin';
+        window.location.href = callbackUrl;
       }
     } catch (err) {
       alertError("Profile update failed.");
@@ -391,7 +392,7 @@ export default function CompleteProfilePage() {
               
               <button
                 type="button"
-                onClick={() => router.push('/admin')}
+                onClick={() => router.push(searchParams.get('callbackUrl') || '/admin')}
                 className="flex-1 py-4 px-6 rounded-2xl border-2 border-gray-200 text-gray-600 font-bold text-lg hover:bg-gray-50 transition-colors"
               >
                 Skip For Now

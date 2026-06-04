@@ -83,14 +83,16 @@ export default function VerifyOtpPage() {
 
       alertSuccess('OTP Verified successfully');
       
+      const targetCallbackUrl = searchParams.get('callbackUrl') || '/admin';
+      
       // Optionally, sign in the user after successful OTP verification
       const loginRes = await signIn('credentials', {
         redirect: false,
         email,
         token: response.token,
         callbackUrl: response.redirectTo === 'complete-profile' 
-          ? `/auth/complete-profile?email=${email}`
-          : '/admin',
+          ? `/auth/complete-profile?email=${email}&callbackUrl=${encodeURIComponent(targetCallbackUrl)}`
+          : targetCallbackUrl,
       });
 
       if (loginRes?.error) {

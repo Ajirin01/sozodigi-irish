@@ -39,10 +39,12 @@ import { routerActions } from 'react-router-redux'
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
 
-const ConsultationBookingPageContent = () => {
+const ConsultationBookingPageContent = ({ specialist: propSpecialist }) => {
   const dispatch = useDispatch();
   
-  const specialist = useSelector((state) => state.specialist.specialist);
+  const reduxSpecialist = useSelector((state) => state.specialist.specialist);
+  const specialist = propSpecialist || reduxSpecialist;
+  
   const price = useSelector((state) => state.specialist.price);
   const duration = useSelector((state) => state.specialist.duration);
 
@@ -64,7 +66,7 @@ const ConsultationBookingPageContent = () => {
   const [mounted, setMounted] = useState(false)
   const { user } = useUser()
   const { addToast } = useToast()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const searchParams = useSearchParams()
   const token = session?.user?.jwt
 
@@ -99,6 +101,8 @@ const ConsultationBookingPageContent = () => {
   }, [selectedDate, specialistsByCategory, token])
   
   const fetchAvailableSlots = async () => {
+    if (!specialist || !specialist._id) return;
+    
     setLoadingSlots(true);
     setAvailableSlots([]);
   
@@ -182,7 +186,7 @@ const ConsultationBookingPageContent = () => {
       
       // We pass the consultant ID if available so it only highlights their active slot days
       const res = await fetchData(
-        `availabilities/summary/slots?startDate=${startDate}&endDate=${endDate}&category=${category}${specialist?._id ? '&consultantId=' + specialist._id : ''}`,
+        `availabilities/summary/slots?startDate=${startDate}&endDate=${endDate}&category=${category}${specialist?._id ? '&consultantId=' + specialist._id : ''}&t=${new Date().getTime()}`,
         token
       );
       if (res && res.success) {
@@ -221,8 +225,17 @@ const ConsultationBookingPageContent = () => {
     dispatch(resetBooking());
   };
 
+  if (status === "loading") {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   if(!session){
     router.push("/login")
+    return null;
   }
 
   return (

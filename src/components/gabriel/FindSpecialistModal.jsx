@@ -1,14 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import io from "socket.io-client";
+import { getSocket } from "@/lib/socket";
 import { FaUserMd, FaCalendarAlt, FaStar, FaTimes, FaRegSadTear } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { Dialog } from "@headlessui/react";
 import ConsultationBookingPageContent from "@/components/BookingPageSelectedCategory"
 import UserAvatar from "./UserAvatar";
-
-const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL, { transports: ["websocket"] });
 
 const FindSpecialistModal = ({ category, closeModal, setTheSpecialist }) => {
   const [specialist, setSpecialist] = useState(null);
@@ -20,10 +18,11 @@ const FindSpecialistModal = ({ category, closeModal, setTheSpecialist }) => {
   // console.log('$$$$$$$$$$$$$$$$$$$$$',category)
 
   useEffect(() => {
+    const socket = getSocket();
     socket.emit("get-online-specialists");
 
     const handleUpdate = (data) => {
-      const matched = data.find((sp) => sp.specialistCategory === category);
+      const matched = data.find((sp) => sp.specialty === category || sp.category === category || sp.specialistCategory === category);
       setSpecialist(matched || null);
       setLoading(false);
     };
@@ -96,7 +95,7 @@ const FindSpecialistModal = ({ category, closeModal, setTheSpecialist }) => {
         </div>
         <div className="text-center">
           <h3 className="text-2xl font-semibold text-gray-800">{`${specialist.firstName} ${specialist.lastName}`}</h3>
-          <p className="text-blue-600 font-medium">{specialist.specialistCategory}</p>
+          <p className="text-blue-600 font-medium">{specialist.specialty || specialist.category || specialist.specialistCategory}</p>
         </div>
         <div className="space-y-2">
           {specialist.yearsOfExperience && (

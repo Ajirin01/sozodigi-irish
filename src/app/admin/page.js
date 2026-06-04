@@ -45,9 +45,7 @@ import {
 } from "@/components/gabriel";
 import ModalContainer from "@/components/gabriel/ModalContainer";
 
-import io from 'socket.io-client';
-const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
-
+import { getSocket } from "@/lib/socket";
 
 export default function Ecommerce() {
   const { data: session } = useSession();
@@ -86,15 +84,19 @@ export default function Ecommerce() {
   const services = gpServices;
 
   useEffect(() => {
+    const socket = getSocket();
     socket.emit("get-online-specialists");
-    socket.on("update-specialists", (data) => {
+
+    const handleUpdate = (data) => {
         const gpsOnly = data.filter((specialist) => specialist.category === "General Practitioner");
         // console.log(gpsOnly)
         setOnlineGPs(gpsOnly);
-    });
+    };
+
+    socket.on("update-specialists", handleUpdate);
 
     return () => {
-      socket.off("update-specialists");
+      socket.off("update-specialists", handleUpdate);
     };
   }, []);
 
@@ -861,7 +863,7 @@ export default function Ecommerce() {
                 <X size={20} />
               </button>
               <div className="w-full">
-                <ConsultationBookingPageContent showSpecialistCategories={false} />
+                <ConsultationBookingPageContent showSpecialistCategories={false} targetCategory="general" />
               </div>
             </div>
           </Dialog>

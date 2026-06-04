@@ -66,7 +66,7 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, selectedCateg
   const [mounted, setMounted] = useState(false)
   const { user } = useUser()
   const { addToast } = useToast()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const searchParams = useSearchParams()
   const token = session?.user?.jwt
 
@@ -117,7 +117,7 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, selectedCateg
       const res = await fetchData('users/get-all/doctors/no-pagination', token);
 
       const filteredSpecialists = res.filter(
-        specialist => specialist.specialty === selectedCategory
+        specialist => specialist.specialty === selectedCategory || specialist.category === selectedCategory || specialist.specialistCategory === selectedCategory
       );
 
       setSpecialistsByCategory(filteredSpecialists); // Directly set the filtered list
@@ -161,7 +161,7 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, selectedCateg
           token
         );
   
-        const filtered = res.data.filter((slot) => {
+        const filtered = (res.data || []).filter((slot) => {
           const slotId = slot._id;
           if (bookedSlotIds.has(slotId)) return false; // Exclude already booked slots
   
@@ -174,7 +174,8 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, selectedCateg
               return new Date(slot.date).toISOString().split('T')[0] === selectedDateString;
             }
           } else {
-            if (slot.category !== "general") return false;
+            // General slots should not be "cert"
+            if (slot.category === "cert") return false;
   
             if (slot.type === 'recurring') {
               return slot.dayOfWeek === selectedDayName;
@@ -228,7 +229,7 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, selectedCateg
       const category = "general"; // For Finding Specialists by category
       
       const res = await fetchData(
-        `availabilities/summary/slots?startDate=${startDate}&endDate=${endDate}&category=${category}`,
+        `availabilities/summary/slots?startDate=${startDate}&endDate=${endDate}&category=${category}&t=${new Date().getTime()}`,
         token
       );
       if (res && res.success) {
@@ -267,11 +268,19 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, selectedCateg
     dispatch(resetBooking());
   };
 
+  if (status === "loading") {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   useEffect(() => {
-    if (mounted && session === null) {
+    if (mounted && status !== "loading" && session === null) {
       router.push("/login")
     }
-  }, [session, mounted, router]);
+  }, [session, status, mounted, router]);
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-0">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import io from "socket.io-client";
+import { getSocket } from "@/lib/socket";
 import { useSelector, useDispatch } from "react-redux";
 import {
   PricingModal,
@@ -21,8 +21,6 @@ import {
   resetBooking,
 } from "@/store/specialistSlice";
 
-const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
-
 const SpecialistPage = () => {
   const dispatch = useDispatch();
 
@@ -40,13 +38,21 @@ const SpecialistPage = () => {
   const [modalContent, setModalContent] = useState(null);
 
   useEffect(() => {
-    socket.emit("get-online-specialists");
-    socket.on("update-specialists", (data) => {
+    const socket = getSocket();
+    
+    // Listen for updates from the server
+    const handleUpdate = (data) => {
+      console.log("Online specialists update:", data);
       setOnlineSpecialists(data);
-    });
+    };
+
+    socket.on("update-specialists", handleUpdate);
+    
+    // Optionally trigger an initial fetch
+    socket.emit("get-online-specialists");
 
     return () => {
-      socket.off("update-specialists");
+      socket.off("update-specialists", handleUpdate);
     };
   }, []);
 

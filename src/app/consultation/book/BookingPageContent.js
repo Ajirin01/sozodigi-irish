@@ -296,7 +296,21 @@ export default function ConsultationBookingPageContent() {
       const selectedDayIndex = localDate.getDay();
       const selectedDayName = days[selectedDayIndex];
 
-      const daySlots = availableSlots.filter(slot => slot.dayOfWeek === selectedDayName);
+      const consultantSlots = availableSlots.filter(slot => {
+        if (!consultant) return false;
+        const slotUserId = typeof slot.user === 'object' ? slot.user?._id : slot.user;
+        return slotUserId === consultant._id;
+      });
+
+      const daySlots = consultantSlots.filter(slot => {
+        if (slot.type === 'recurring') {
+          return slot.dayOfWeek === selectedDayName;
+        } else if (slot.type === 'one-time' && slot.date) {
+          const slotDate = new Date(slot.date);
+          return slotDate.toISOString().split('T')[0] === localDate.toISOString().split('T')[0];
+        }
+        return false;
+      });
 
       console.log(daySlots)
 

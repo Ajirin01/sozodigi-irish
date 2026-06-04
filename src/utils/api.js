@@ -1,5 +1,5 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_NODE_API_BASE_URL || "http://localhost:5000";
-const PLATFORM = process.env.NEXT_PUBLIC_PLATFORM || "global";
+const PLATFORM = process.env.NEXT_PUBLIC_PLATFORM || "irish";
 
 // Timeout Fetch with Retry
 export async function fetchWithTimeout(resource, options = {}, timeout = 10000, retries = 3) {

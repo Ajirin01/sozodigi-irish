@@ -85,6 +85,7 @@ const PrescriptionReceipt = () => {
                     width={100} 
                     height={100}
                     className="border p-1 bg-white"
+                    crossOrigin="anonymous"
                   />
                   <p className="text-[10px] text-gray-500 mt-1">Scan to verify</p>
                 </div>
@@ -119,6 +120,7 @@ const PrescriptionReceipt = () => {
                     width={180}
                     height={80}
                     className="inline-block"
+                    crossOrigin="anonymous"
                 />
                 <p className="italic text-sm">Dr. {appointmentSession.specialist?.firstName} {appointmentSession.specialist?.lastName}</p>
                 <p className="italic text-sm">Reg. NO:  {appointmentSession.specialist?.licenseNumber}</p>

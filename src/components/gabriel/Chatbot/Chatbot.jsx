@@ -11,6 +11,9 @@ import { openChatBot, resetChatbotAttention } from "@/store/popUpSlice";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/api";
 import { useSession } from "next-auth/react";
+import PricingModal from "@/components/gabriel/PricingModal";
+import ModalContainer from "@/components/gabriel/ModalContainer";
+import { setPrice, setSpecialist, setDuration } from '@/store/specialistSlice';
 
 const apiUrl = process.env.NEXT_PUBLIC_NODE_BASE_URL;
 
@@ -22,7 +25,7 @@ const exampleMessages = [
   },
 ];
 
-const MessageWithDisclaimer = ({ text, sender, showDisclaimer }) => {
+const MessageWithDisclaimer = ({ text, sender, showDisclaimer, onConsultDoctor }) => {
   const router = useRouter();
 
   return (
@@ -56,6 +59,104 @@ const MessageWithDisclaimer = ({ text, sender, showDisclaimer }) => {
             <RiCustomerService2Fill /> Speak to a Consultant
           </button>
         </div>
+      )}
+
+      {isOpenModals && modalContent === "pricingModal" && (
+        <ModalContainer
+          modal={
+            <PricingModal
+                closeModal={closeDialog}
+                setPrice={(p) => dispatch(setPrice(p))}
+                setDuration={(d) => dispatch(setDuration(d))}
+                specialist={useSelector((state) => state.specialist.specialist)}
+                currency="USD"
+                plans={[
+                    {
+                        title: "Basic",
+                        price: 20,
+                        oldPrice: 25,
+                        duration: 15,
+                        features: ["Duration: 15 mins", "Quick call", "Summary"],
+                    },
+                    {
+                        title: "Delux",
+                        price: 30,
+                        oldPrice: 40,
+                        duration: 25,
+                        features: [
+                            "Duration: 25 mins",
+                            "Report",
+                            "Follow-up",
+                            "Pharmacy Referral",
+                        ],
+                        isRecommended: true,
+                    },
+                    {
+                        title: "Premium",
+                        price: 60,
+                        oldPrice: 75,
+                        duration: 40,
+                        features: [
+                            "Duration: 40 mins",
+                            "Report",
+                            "Follow-up",
+                            "Pharmacy Referral",
+                            "Laboratory Referral",
+                        ],
+                    },
+                ]}
+            />
+          }
+        />
+      )}
+
+      {isOpenModals && modalContent === "pricingModal" && (
+        <ModalContainer
+          modal={
+            <PricingModal
+                closeModal={closeDialog}
+                setPrice={(p) => dispatch(setPrice(p))}
+                setDuration={(d) => dispatch(setDuration(d))}
+                specialist={useSelector((state) => state.specialist.specialist)}
+                currency="USD"
+                plans={[
+                    {
+                        title: "Basic",
+                        price: 20,
+                        oldPrice: 25,
+                        duration: 15,
+                        features: ["Duration: 15 mins", "Quick call", "Summary"],
+                    },
+                    {
+                        title: "Delux",
+                        price: 30,
+                        oldPrice: 40,
+                        duration: 25,
+                        features: [
+                            "Duration: 25 mins",
+                            "Report",
+                            "Follow-up",
+                            "Pharmacy Referral",
+                        ],
+                        isRecommended: true,
+                    },
+                    {
+                        title: "Premium",
+                        price: 60,
+                        oldPrice: 75,
+                        duration: 40,
+                        features: [
+                            "Duration: 40 mins",
+                            "Report",
+                            "Follow-up",
+                            "Pharmacy Referral",
+                            "Laboratory Referral",
+                        ],
+                    },
+                ]}
+            />
+          }
+        />
       )}
     </div>
   );
@@ -321,6 +422,7 @@ const ChatBot = () => {
                         text={message.text} 
                         sender={message.sender} 
                         showDisclaimer={message.showDisclaimer}
+                        onConsultDoctor={handleConsultDoctor}
                       />
                     </div>
                   ))}

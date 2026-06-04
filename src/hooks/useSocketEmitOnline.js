@@ -110,15 +110,23 @@ export default function useSocketEmitOnline() {
     }
 
     const emitSpecialistOnline = () => {
-      if (socketRef.current?.connected && user.role === "specialist") {
-        socketRef.current.emit("specialist-online", user);
+      const allowedRoles = ["specialist", "consultant"];
+      if (socketRef.current?.connected && allowedRoles.includes(user?.role)) {
+        const platform = process.env.NEXT_PUBLIC_PLATFORM || "irish";
+        const payload = { ...user, platform };
+        socketRef.current.emit("specialist-online", payload);
       }
     };
 
-    socketRef.current.on("connect", () => {
-      console.log("✅ Specialist socket connected:", socketRef.current.id);
+    if (socketRef.current.connected) {
+      console.log("✅ Specialist socket already connected:", socketRef.current.id);
       setTimeout(emitSpecialistOnline, 500);
-    });
+    } else {
+      socketRef.current.on("connect", () => {
+        console.log("✅ Specialist socket connected:", socketRef.current.id);
+        setTimeout(emitSpecialistOnline, 500);
+      });
+    }
 
     socketRef.current.io.on("reconnect", () => {
       console.log("🔄 Reconnected. Re-emitting specialist-online...");

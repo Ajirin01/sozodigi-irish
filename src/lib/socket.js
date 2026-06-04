@@ -5,13 +5,14 @@ let socket;
 
 export function getSocket() {
   if (!socket) {
-    socket = io(process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:4000", {
-      transports: ["websocket"],
+    const platform = process.env.NEXT_PUBLIC_PLATFORM || "irish";
+    socket = io(process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:5000", {
+      query: { platform }
     });
 
     socket.on("connect", () => {
-      console.log("✅ Socket connected, joining platform:", process.env.NEXT_PUBLIC_PLATFORM || "global");
-      socket.emit("join-platform", { platform: process.env.NEXT_PUBLIC_PLATFORM || "global" });
+      console.log("✅ Socket connected, joining platform:", platform);
+      socket.emit("join-platform", { platform });
     });
   }
   return socket;

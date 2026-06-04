@@ -38,7 +38,7 @@ import { loadStripe } from '@stripe/stripe-js'
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
 
-const ConsultationBookingPageContent = ({showSpecialistCategories, targetCategory}) => {
+const ConsultationBookingPageContent = ({showSpecialistCategories = true, targetCategory}) => {
   const dispatch = useDispatch();
 
   // console.log(!showSpecialistCategories)
@@ -63,7 +63,7 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, targetCategor
   const [mounted, setMounted] = useState(false);
   const { user } = useUser()
   const { addToast } = useToast()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const searchParams = useSearchParams()
   const token = session?.user?.jwt
 
@@ -131,7 +131,7 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, targetCategor
       const res = await fetchData('users/get-all/doctors/no-pagination', token)
       
       const grouped = res.reduce((acc, specialist) => {
-        const category = specialist.category || 'Uncategorized'
+        const category = specialist.category || specialist.specialty || specialist.specialistCategory || 'Uncategorized'
         if (!acc[category]) acc[category] = []
         acc[category].push(specialist)
         return acc
@@ -154,7 +154,9 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, targetCategor
           ];
         }
         setSpecialistsByCategory(targetDocs)
-      } else if (!showSpecialistCategories) {
+      } else {
+        // If showSpecialistCategories is true and no category is selected yet, we still want to be able to fetch slots!
+        // We set it to all specialists initially, so the calendar slots work without requiring a category click.
         setSpecialistsByCategory(res)
       }
 
@@ -225,7 +227,8 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, targetCategor
           if (bookedSlotIds.has(slotId)) return false; // Exclude already booked slots
   
           const filterCategory = targetCategory || (showSpecialistCategories ? 'general' : 'cert');
-          if (slot.category !== filterCategory) return false;
+          if (filterCategory === 'cert' && slot.category !== 'cert') return false;
+          if (filterCategory === 'general' && slot.category === 'cert') return false;
 
           if (slot.type === 'recurring') {
             return slot.dayOfWeek === selectedDayName;
@@ -292,7 +295,7 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, targetCategor
       const durationFilter = (isRescheduling && rescheduleData) ? `&duration=${rescheduleData.duration}` : "";
 
       const res = await fetchData(
-        `availabilities/summary/slots?startDate=${startDate}&endDate=${endDate}&category=${category}${durationFilter}`,
+        `availabilities/summary/slots?startDate=${startDate}&endDate=${endDate}&category=${category}${durationFilter}&t=${new Date().getTime()}`,
         token
       );
       if (res && res.success) {
@@ -360,9 +363,18 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, targetCategor
     dispatch(resetBooking());
   };
 
+  if (status === "loading") {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   if (!session) {
     const callbackUrl = encodeURIComponent(pathname);
     router.push(`/login?callbackUrl=${callbackUrl}`);
+    return null;
   }
 
   return (

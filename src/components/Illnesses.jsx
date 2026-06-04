@@ -6,10 +6,8 @@ import ModalContainer from "@/components/gabriel/ModalContainer";
 import { FindSpecialistModal, PricingModal, CheckoutModal } from "@/components/gabriel";
 import { useDispatch, useSelector } from "react-redux";
 import { setSpecialist, setPrice, setDuration, resetBooking } from "@/store/specialistSlice";
-import io from "socket.io-client";
+import { getSocket } from "@/lib/socket";
 import { CURRENCY_CODE } from "@/utils/currency";
-
-const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
 
 const illnesses = [
   { name: "Cold & Flu", image: "/images/health-illness/body.png" },
@@ -62,14 +60,18 @@ const GPServicesIllnesses = ({ limit }) => {
   const [onlineGPs, setOnlineGPs] = useState([]);
 
   useEffect(() => {
+    const socket = getSocket();
     socket.emit("get-online-specialists");
-    socket.on("update-specialists", (data) => {
-        const gpsOnly = data.filter((specialist) => specialist.category === "General Practitioner");
+
+    const handleUpdate = (data) => {
+        const gpsOnly = data.filter((specialist) => specialist.specialty === "General Practitioner" || specialist.category === "General Practitioner" || specialist.specialistCategory === "General Practitioner");
         setOnlineGPs(gpsOnly);
-    });
+    };
+
+    socket.on("update-specialists", handleUpdate);
 
     return () => {
-      socket.off("update-specialists");
+      socket.off("update-specialists", handleUpdate);
     };
   }, []);
 

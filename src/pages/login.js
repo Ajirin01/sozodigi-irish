@@ -24,8 +24,7 @@ export default function LoginPage() {
   const { addToast } = useToast();
 
   const searchParams = useSearchParams();
-  // const callbackUrl = searchParams.get("callbackUrl") || "/admin";
-  const callbackUrl = "/admin";
+  const callbackUrl = searchParams ? searchParams.get("callbackUrl") || "/admin" : "/admin";
 
 
   const handleSubmit = async (e) => {
@@ -128,7 +127,7 @@ export default function LoginPage() {
                 <div className="text-sm text-center text-gray-600">
                   Don't have an account?{" "}
                   <Link
-                    href="/auth/sign-up"
+                    href={`/auth/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}
                     className="text-[var(--color-primary-5)] underline"
                   >
                     Sign Up

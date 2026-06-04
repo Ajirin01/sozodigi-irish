@@ -19,7 +19,7 @@ import {
   Pediatrician, Psychiatrist, Surgeon, Urologist, Gynecologist
 } from "@/assets";
 
-const socket = typeof window !== "undefined" ? require("socket.io-client")(process.env.NEXT_PUBLIC_SOCKET_URL) : null;
+import { getSocket } from "@/lib/socket";
 
 const specialistCategories = [
   { name: "Cardiology", desc: "Heart and blood vessel diseases.", image: Cardiologist },
@@ -53,10 +53,15 @@ const SpecialistCategories = () => {
   const pageCount = Math.ceil(specialistCategories.length / itemsPerPage);
 
   useEffect(() => {
+    const socket = getSocket();
     if (!socket) return;
+    
     socket.emit("get-online-specialists");
-    socket.on("update-specialists", (data) => setOnlineSpecialists(data));
-    return () => socket.off("update-specialists");
+    
+    const handleUpdate = (data) => setOnlineSpecialists(data);
+    socket.on("update-specialists", handleUpdate);
+    
+    return () => socket.off("update-specialists", handleUpdate);
   }, []);
 
   const openCheckoutModal = (price, duration) => {
