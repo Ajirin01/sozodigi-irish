@@ -243,7 +243,12 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, selectedCateg
   useEffect(() => {
     fetchSlotSummary(currentMonth);
   }, [token, currentMonth, selectedCategory]);
-  
+
+  useEffect(() => {
+    if (mounted && status !== "loading" && session === null) {
+      router.push("/login")
+    }
+  }, [session, status, mounted, router]);
 
   if (!mounted) return null
 
@@ -275,12 +280,6 @@ const ConsultationBookingPageContent = ({showSpecialistCategories, selectedCateg
       </div>
     );
   }
-
-  useEffect(() => {
-    if (mounted && status !== "loading" && session === null) {
-      router.push("/login")
-    }
-  }, [session, status, mounted, router]);
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-0">

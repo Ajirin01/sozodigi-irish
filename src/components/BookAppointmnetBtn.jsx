@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getSocket } from "@/lib/socket";
@@ -10,6 +11,7 @@ const BookAppointmentBTN = ({ category }) => {
 
   useEffect(() => {
     const socket = getSocket();
+    if (!socket) return; // SSR guard — socket is null on server
 
     // Request the latest list of online specialists immediately
     socket.emit("get-online-specialists");
@@ -42,7 +44,7 @@ const BookAppointmentBTN = ({ category }) => {
       : "/admin/consultation/book?consultationMode=appointment";
 
     if (!session) {
-      router.push(`/login?callbackUrl=${encodeURIComponent(targetUrl)}`);
+      router.push(`/auth/sign-up?callbackUrl=${encodeURIComponent(targetUrl)}`);
     } else {
       router.push(targetUrl);
     }

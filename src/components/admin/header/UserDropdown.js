@@ -31,7 +31,7 @@ export default function UserDropdown() {
 
   const handleLogout = async () => {
     try {
-      await signOut({ redirect: true, callbackUrl: "/login" }); // Redirect to sign-in page after logout
+      await signOut({ redirect: true, callbackUrl: "/auth/sign-up" }); // Redirect to sign-in page after logout
     } catch (error) {
       console.error("Logout failed", error);
     }

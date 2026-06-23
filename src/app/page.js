@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import Swiper from 'swiper';
 import { fetchData } from '@/utils/api';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -27,7 +26,6 @@ import Button from '@/components/gabriel/Button';
 import { cards } from '@/data/cards';
 // import { blogs } from '@/data/blogs';
 import FaqSection from '@/components/FAQs';
-import { useMediaQuery } from 'react-responsive'; 
 import TypewriterEffect from '@/components/gabriel/TypewriterEffect';
 import { useRouter } from 'next/navigation';
 import { openChatBot, triggerChatbotAttention } from '@/store/popUpSlice';
@@ -118,13 +116,6 @@ export default function HomePage() {
     setHasMounted(true);
   }, []);
 
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   useEffect(() => {
     async function fetchGalleries() {

@@ -51,7 +51,7 @@ export default function ResetPasswordPage() {
 
       // Redirect to login after success
       setTimeout(() => {
-        router.push('/login');
+        router.push('/auth/sign-up');
       }, 2000);
     } catch (err) {
       setError(err.message || 'An error occurred');

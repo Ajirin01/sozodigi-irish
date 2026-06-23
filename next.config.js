@@ -10,6 +10,8 @@ const nextConfig = withPWA({
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Exclude browser-only packages from server bundle to prevent SSR crashes
+  serverExternalPackages: ['socket.io-client'],
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,

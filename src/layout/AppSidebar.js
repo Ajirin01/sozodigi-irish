@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { useSidebar } from "@/context/admin/SidebarContext";
 import { fetchData } from "@/utils/api";
 import { useSession } from "next-auth/react";
-import { useUser  } from "@/context/UserContext"
+import { useUser } from "@/context/UserContext"
 import { signOut } from 'next-auth/react';
 import UserAvatar from "../components/gabriel/UserAvatar";
 import {
@@ -53,7 +53,7 @@ const AppSidebar = () => {
   const { data: session } = useSession();
   const token = session?.user?.jwt;
 
-  const { user } = useUser()
+  const { user, loading: userLoading } = useUser()
   
 
   const toggleSubmenu = (key) => {
@@ -161,7 +161,8 @@ const AppSidebar = () => {
   };
 
   const getNavItems = () => {
-    const role = session?.user?.role;
+    // Prefer the full user object from UserContext; fall back to session while it's loading
+    const role = user?.role ?? session?.user?.role;
 
     const filterByRole = (items) => {
       return items
@@ -536,7 +537,21 @@ const AppSidebar = () => {
         >
           {isExpanded || isHovered || isMobileOpen ? "" : <MoreHorizontal />}
         </h2>
-        {renderMenuItems(getNavItems())}
+        {userLoading && !user && !session?.user?.role ? (
+          // Skeleton loader while user role is being resolved
+          <ul className="flex flex-col gap-2 mt-2">
+            {[...Array(5)].map((_, i) => (
+              <li key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg">
+                <span className="w-5 h-5 rounded bg-gray-200 animate-pulse" />
+                {(isExpanded || isHovered || isMobileOpen) && (
+                  <span className="h-4 w-32 rounded bg-gray-200 animate-pulse" />
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          renderMenuItems(getNavItems())
+        )}
       </nav>
     </div>
 

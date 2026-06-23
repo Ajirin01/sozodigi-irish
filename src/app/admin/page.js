@@ -49,16 +49,14 @@ import { getSocket } from "@/lib/socket";
 
 export default function Ecommerce() {
   const { data: session } = useSession();
-  const userRole = session?.user?.role ?? "user";
-  const token = session?.user?.jwt
+  const { user } = useUser();
+  const userRole = user?.role ?? session?.user?.role ?? "user";
+  const token = session?.user?.jwt;
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-  const router = useRouter()
-
-  const { user } = useUser()
-
-  const userId = user?._id
+  const userId = user?._id;
 
   const PRICE = 20;
 
@@ -163,7 +161,7 @@ export default function Ecommerce() {
 
   useEffect(() => {
     if(token && userRole !== "labAdmin" && userRole !== "pharmacyAdmin") fetchSessionData();
-  }, [token]);
+  }, [token, userRole]);
 
   const fetchAppointmentData = async () => {
     if(!user) return
@@ -269,28 +267,32 @@ export default function Ecommerce() {
   }
 
   useEffect(() => {
-    if (userRole === "admin" || userRole === "superAdmin") {
+    if (token && (userRole === "admin" || userRole === "superAdmin")) {
       fetchPatients();
       fetchDoctors();
       fetchPharmacies();
       fetchRevenue();
     }
-  }, [userRole]);
+  }, [userRole, token]);
 
-  // Simulated fetch
   useEffect(() => {
+    if (token && user) {
+      fetchAppointmentData();
+    }
+  }, [token, user, userRole]);
 
-    if(token) fetchAppointmentData()
+  useEffect(() => {
+    if (prescriptions) {
+      setRecentMedications(prescriptions);
+      setRecordsCount(prescriptions?.length);
 
-    setRecentMedications(prescriptions);
-    setRecordsCount(prescriptions?.length);
-
-    const latestDate = prescriptions?.reduce((latest, current) => {
-      const currentStart = new Date(current.startDate);
-      return currentStart > latest ? currentStart : latest;
-    }, new Date(0));
-    setLastUpdated(latestDate);
-  }, [prescriptions, token]);
+      const latestDate = prescriptions.reduce((latest, current) => {
+        const currentStart = new Date(current.startDate);
+        return currentStart > latest ? currentStart : latest;
+      }, new Date(0));
+      setLastUpdated(latestDate);
+    }
+  }, [prescriptions]);
 
   const formatLastUpdated = (date) => {
     if (!date) return "No data";

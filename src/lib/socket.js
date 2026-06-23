@@ -1,10 +1,11 @@
 // src/lib/socket.js
-import { io } from "socket.io-client";
-
 let socket;
 
 export function getSocket() {
+  if (typeof window === "undefined") return null; // SSR guard — never run on server
+
   if (!socket) {
+    const { io } = require("socket.io-client"); // dynamic require — only on client
     const platform = process.env.NEXT_PUBLIC_PLATFORM || "irish";
     socket = io(process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:5000", {
       query: { platform }
