@@ -1,6 +1,6 @@
 const withPWA = require("next-pwa")({
   dest: "public",
-  disable: process.env.NODE_ENV === "development", // disables PWA in dev
+  disable: true, // disable next-pwa to prevent build hangs in Next.js 15
   register: true,
   skipWaiting: true,
 });
